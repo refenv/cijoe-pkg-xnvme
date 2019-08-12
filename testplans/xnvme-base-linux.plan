@@ -1,0 +1,28 @@
+descr: Basic verification of xNVMe on Linux
+descr_long: |
+  Basic Verification of xNVMe and the Zoned Command Set.
+  See 'envs/refenv-xnvme.sh' for an example of defining an environment for this
+  testplan. The testplan relies on the two environment variables
+  XNVME_BE
+  XNVME_URI
+  Please define the environment variable XNVME_BE either in the environment
+  definition or in the testplan variables below. The xnvme-hook uses it to
+  determie whether or not to unload the kernel NVMe driver
+  The backend be:lioc is not explicitly exercised here since it does not support
+  async, however, everything which be:lioc supports is exercised via be:laio,
+  and be:liou
+  The backend be:fioc is not exercised here since it is for FreeBSD.
+hooks: ["sysinf"]
+testsuites:
+  - name: xnvme_base
+    alias: "xNVMe:base/be:laio: verify base functionality using be:laio"
+    evars: { NVME_NSTYPE: "lblk", XNVME_BE: "LAIO" }
+    hooks: ["xnvme"]
+  - name: xnvme_base
+    alias: "xNVMe:base/be:liou: verify base functionality using be:liou"
+    evars: { NVME_NSTYPE: "lblk", XNVME_BE: "LIOU" }
+    hooks: ["xnvme"]
+  - name: xnvme_base_no_multi
+    alias: "xNVMe:base/be:spdk: verify base functionality using be:spdk"
+    evars: { NVME_NSTYPE: "lblk", XNVME_BE: "SPDK", HUGEMEM: "4096" }
+    hooks: ["xnvme"]

@@ -1,0 +1,75 @@
+descr: xNVMe IO Verification using the Flexible I/O Tester (fio)
+descr_long: |
+  This sequence of testcases verifies the following backends
+  liou
+  liou with poll_io=1
+  liou with poll_sq=1
+  liou with poll_sq=1 and poll_io=1
+  spdk
+  Also, runs regular io_uring for comparison
+
+evars:
+  CMD_PREFIX": "taskset -c 2 perf stat"
+  NVME_NSTYPE: "lblk"
+  FIOE_NRUNS: "3"
+  FIOE_SECTION: "default"
+hooks: ["dmesg"]
+testsuites:
+  - name: XNVME_FIOE_VERIFY_URING
+    alias: "Regular/uring"
+    evars: { FIOE_NAME: "io_uring", "URING" }
+    testcases:
+      - xnvme_fioe_verify.sh
+
+  - name: XNVME_FIOE_VERIFY_URING_IOPOLL
+    alias: "Regular/uring with IOPOLL"
+    evars: { FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1" }
+    testcases:
+      - xnvme_fioe_verify.sh
+
+  - name: XNVME_FIOE_VERIFY_URING_SQPOLL
+    alias: "Regular/uring with SQPOLL"
+    evars: { FIOE_NAME: "io_uring", FIOE_AUX: "--sqthread_poll=1" }
+    testcases:
+      - xnvme_fioe_verify.sh
+
+  - name: XNVME_FIOE_VERIFY_URING_ALL
+    alias: "Regular/uring with IOPOLL + SQPOLL"
+    evars: { FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --sqthread_poll=1" }
+    testcases:
+      - xnvme_fioe_verify.sh
+
+  - name: XNVME_FIOE_VERIFY_LIOU
+    alias: "xNVMe/uring"
+    evars: { FIOE_NAME: "xnvme", XNVME_BE: "LIOU" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_verify.sh
+
+  - name: XNVME_FIOE_VERIFY_LIOU_IOPOLL
+    alias: "xNVMe/uring with IOPOLL"
+    evars: { FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--hipri=1" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_verify.sh
+
+  - name: XNVME_FIOE_VERIFY_LIOU_SQPOLL
+    alias: "xNVMe/uring with SQPOLL"
+    evars: { FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_verify.sh
+
+  - name: XNVME_FIOE_VERIFY_LIOU_ALL
+    alias: "xNVMe/uring with IOPOLL + SQPOLL"
+    evars: { FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--hipri=1 --sqthread_poll=1" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_verify.sh
+
+  - name: XNVME_FIOE_VERIFY_SPDK
+    alias: "xNVMe/spdk"
+    evars: { FIOE_NAME: "xnvme", XNVME_BE: "SPDK" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_verify.sh
