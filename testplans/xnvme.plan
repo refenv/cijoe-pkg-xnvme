@@ -1,0 +1,58 @@
+descr: Basic verification of xNVMe
+descr_long: |
+  Basic Verification of xNVMe and the Zoned Command Set.
+  See 'envs/refenv-xnvme.sh' for an example of defining an environment for this
+  testplan. The testplan relies on the two environment variables
+  XNVME_BE
+  XNVME_URI
+  Please define the environment variable XNVME_BE either in the environment
+  definition or in the testplan variables below. The xnvme-hook uses it to
+  determine whether or not to unload the kernel NVMe driver
+#evars: { XNVME_BE: "SPDK", HUGEMEM: "4096" }
+#evars: { XNVME_BE: "FIOC" }
+#evars: { XNVME_BE: "LIOC" }
+#evars: { XNVME_BE: "LIOU" }
+hooks: ["xnvme"]
+testsuites:
+  - name: XNVME_BASE
+    alias: "xNVMe:base: verification of base functionality"
+    evars: { NVME_NSTYPE: "lblk" }
+    testcases:
+      - xnvme_tests_enum_multi.sh
+      - xnvme_tests_enum_open.sh
+      - xnvme_library_info.sh
+      - xnvme_tests_ident.sh
+      - xnvme_enum.sh
+      - xnvme_info.sh
+      - xnvme_idfy_ctrlr.sh
+      - xnvme_idfy_ns.sh
+      - xnvme_idfy.sh
+      - xnvme_log.sh
+      - xnvme_log-erri.sh
+      - xnvme_log-health.sh
+      - xnvme_padc.sh
+      - xnvme_pioc.sh
+      - xnvme_feature_get.sh
+      - xnvme_feature_set.sh
+#      - xnvme_format.sh
+#      - xnvme_sanitize.sh
+      - examples-xnvme_hello.sh
+
+  - name: XNVME_ASYNC
+    alias: "xNVMe: asynchronous interface test and examples"
+    evars: { NVME_NSTYPE: "lblk" }
+    testcases:
+      - xnvme_tests_async_intf01.sh
+      - xnvme_tests_async_intf02.sh
+      - xnvme_tests_async_intf03.sh
+      - xnvme_tests_async_intf04.sh
+
+  - name: XNVME_LBLK_IO
+    alias: "xNVMe: asynchronous interface test and examples"
+    evars: { NVME_NSTYPE: "lblk" }
+    testcases:
+      - examples-xnvme_io_async_write.sh
+      - examples-xnvme_io_async_read.sh
+      - xnvme_fio_101.sh
+#      - xnvme_fio_verify_nvme.sh
+#      - xnvme_fio_compare_nvme.sh

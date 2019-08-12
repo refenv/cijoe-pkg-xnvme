@@ -1,0 +1,98 @@
+descr: xNVMe IO comparison using the Flexible I/O Tester (fio)
+descr_long: |
+  This testplans compares, e.g. executes fio using the following backends
+  liou
+  liou with poll_sq=1
+  Also, runs regular io_uring for comparison
+  The --hipri option is left out as it gives strange results using together with
+  the Null Block device
+evars:
+  CMD_PREFIX: "taskset -c 2 perf stat"
+  NVME_NSTYPE: "lblk"
+  FIOE_NRUNS: "3"
+  XNVME_BE: "LIOU"
+  XNVME_DEV_PATH: "/dev/nullb0"
+  # Do not run with --hipri when using bio-based(0) queue_mode
+  #NULLBLK_QUEUE_MODE: "0"
+  NULLBLK_QUEUE_MODE: "2"
+  NULLBLK_IRQMODE: "0"
+hooks: ["dmesg", "nullblk"]
+testsuites:
+# AIO
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_LIBAIO
+    alias: "Regular/uring"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "libaio", "URING" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# URING
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_URING
+    alias: "Regular/uring"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_URING_REGFILES
+    alias: "Regular/uring +RF"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--registerfiles=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_URING_FIXEDBUFS
+    alias: "Regular/uring +FB"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_URING_REGFILES_FIXEDBUFS
+    alias: "Regular/uring +RF +FB"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# URING IOPOLL
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_URING_IOPOLL_REGFILES
+    alias: "Regular/uring +IOP +RF"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --registerfiles=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_URING_IOPOLL_FIXEDBUFS
+    alias: "Regular/uring +IOP +FB"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_URING_IOPOLL_REGFILES_FIXEDBUFS
+    alias: "Regular/uring +IOP +RF +FB"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# URING SQPOLL
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_URING_SQPOLL
+    alias: "Regular/uring with +SQT"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--sqthread_poll=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_REGLR_URING_SQPOLL_REGFILES_FIXEDBUFS
+    alias: "Regular/uring with +SQT +RF + FB"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--sqthread_poll=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# xNVMe
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_XNVME_URING
+    alias: "xNVMe/uring"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme"}
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_NULLBLK_QD1_XNVME_URING_SQPOLL_REGFILES
+    alias: "xNVMe/uring with +SQT +RF"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme", FIOE_AUX: "--sqthread_poll=1" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh

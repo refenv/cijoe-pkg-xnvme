@@ -1,0 +1,39 @@
+descr: Basic verification of xNVMe/Zoned
+descr_long: |
+  Basic Verification of xNVMe and the Zoned Command Set.
+  See 'envs/refenv-xnvme.sh' for an example of defining an environment for this
+  testplan. The testplan relies on the two environment variables
+  XNVME_BE
+  XNVME_URI
+  Please define the environment variable XNVME_BE either in the environment
+  definition or in the testplan variables below. The xnvme-hook uses it to
+  determine whether or not to unload the kernel NVMe driver
+#evars: { XNVME_BE: "SPDK", HUGEMEM: "4096" }
+#evars: { XNVME_BE: "FIOC" }
+#evars: { XNVME_BE: "LIOC" }
+#evars: { XNVME_BE: "LIOU" }
+hooks: ["xnvme"]
+testsuites:
+  - name: XNVME_ZONED
+    alias: "xNVMe:zoned: Tests for Zoned Namespaces"
+    evars: { NVME_NSTYPE: "zoned" }
+    testcases:
+      - zoned_enum.sh
+      - zoned_info.sh
+      - zoned_idfy_ns.sh
+      - zoned_idfy_ctrlr.sh
+      - zoned_report.sh
+      - zoned_report_one.sh
+      - zoned_report_some.sh
+      - zoned_report_all.sh
+      - zoned_changes.sh
+      - zoned_mgmt_open.sh
+      - zoned_mgmt.sh
+      - zoned_write.sh
+      - zoned_append.sh
+      - zoned_read.sh
+      - examples-zoned_io_sync.sh
+      - examples-zoned_io_async_write.sh
+      - examples-zoned_io_async_read.sh
+      - examples-zoned_io_async_append.sh
+      - xnvme_tests_znd_append.sh

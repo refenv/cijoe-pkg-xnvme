@@ -1,0 +1,312 @@
+descr: xNVMe IO comparison using the Flexible I/O Tester (fio)
+descr_long: |
+  This testplans compares, e.g. executes fio using the following backends
+  liou
+  liou with poll_io=1
+  liou with poll_sq=1
+  liou with poll_sq=1 and poll_io=1
+  spdk
+  Also, runs regular io_uring for comparison
+
+evars:
+  CMD_PREFIX: "taskset -c 2 perf stat"
+  NVME_NSTYPE: "lblk"
+  FIOE_NRUNS: "3"
+hooks: ["dmesg"]
+testsuites:
+# libaio
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_LIBAIO
+    alias: "Regular/uring"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "libaio", FIOE_AUX: "" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD2_REGLR_LIBAIO
+    alias: "Regular/uring"
+    evars: { FIOE_SECTION: "qd2", FIOE_NAME: "libaio", FIOE_AUX: "" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD4_REGLR_LIBAIO
+    alias: "Regular/uring"
+    evars: { FIOE_SECTION: "qd4", FIOE_NAME: "libaio", FIOE_AUX: "" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# uring
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_URING
+    alias: "Regular/uring"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD2_REGLR_URING
+    alias: "Regular/uring"
+    evars: { FIOE_SECTION: "qd2", FIOE_NAME: "io_uring", FIOE_AUX: "" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD4_REGLR_URING
+    alias: "Regular/uring"
+    evars: { FIOE_SECTION: "qd4", FIOE_NAME: "io_uring", FIOE_AUX: "" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_URING_RF_FB
+    alias: "Regular/uring"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--registerfiles=1 --fixedbufs=1"}
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# uring +IOP
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_URING_IOP
+    alias: "Regular/uring with +IOP"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD2_REGLR_URING_IOP
+    alias: "Regular/uring with +IOP"
+    evars: { FIOE_SECTION: "qd2", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD4_REGLR_URING_IOP
+    alias: "Regular/uring with +IOP"
+    evars: { FIOE_SECTION: "qd4", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_URING_IOP_RF_FB
+    alias: "Regular/uring with +IOP +RF +FB"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD2_REGLR_URING_IOP_RF_FB
+    alias: "Regular/uring with +IOP +RF +FB"
+    evars: { FIOE_SECTION: "qd2", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD4_REGLR_URING_IOP_RF_FB
+    alias: "Regular/uring with +IOP +RF +FB"
+    evars: { FIOE_SECTION: "qd4", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# uring + SQT
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_URING_SQT_RF
+    alias: "Regular/uring with +SQT +RF"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--sqthread_poll=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD16_REGLR_URING_SQT_RF
+    alias: "Regular/uring with +SQT +RF"
+    evars: { FIOE_SECTION: "qd16", FIOE_NAME: "io_uring", FIOE_AUX: "--sqthread_poll=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_URING_SQT_RF_FB
+    alias: "Regular/uring with +SQT"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--sqthread_poll=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD16_REGLR_URING_SQT_RF_FB
+    alias: "Regular/uring with +SQT"
+    evars: { FIOE_SECTION: "qd16", FIOE_NAME: "io_uring", FIOE_AUX: "--sqthread_poll=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# uring mega-polling
+#  - name: XNVME_FIOE_COMPARE_QD1_REGLR_URING_IOP_SQT
+#    alias: "Regular/uring with +IOP +SQT"
+#    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --sqthread_poll=1" }
+#    testcases:
+#      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_URING_IOP_SQT_RF_FB
+    alias: "Regular/uring with +IOP +SQT +RF +FB"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --sqthread_poll=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# xNVMe/uring
+  - name: XNVME_FIOE_COMPARE_QD1_XNVME_URING
+    alias: "xNVMe/uring"
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD2_XNVME_URING
+    alias: "xNVMe/uring"
+    evars: { FIOE_SECTION: "qd2", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD4_XNVME_URING
+    alias: "xNVMe/uring"
+    evars: { FIOE_SECTION: "qd4", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_XNVME_URING_SQT_RF
+    alias: "xNVMe/uring with +SQT +RF"
+    #    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1 --registerfiles=1" }
+    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD2_XNVME_URING_SQT_RF
+    alias: "xNVMe/uring with +SQT +RF"
+    #    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1 --registerfiles=1" }
+    evars: { FIOE_SECTION: "qd2", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD4_XNVME_URING_SQT_RF
+    alias: "xNVMe/uring with +SQT +RF"
+    #    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1 --registerfiles=1" }
+    evars: { FIOE_SECTION: "qd4", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD16_XNVME_URING_SQT_RF
+    alias: "xNVMe/uring with +SQT +RF"
+    #    evars: { FIOE_SECTION: "qd16", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1 --registerfiles=1" }
+    evars: { FIOE_SECTION: "qd16", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+#  - name: XNVME_FIOE_COMPARE_QD1_XNVME_URING_SQT_RF_FB
+#    alias: "xNVMe/uring with +SQT +RF +FB"
+#    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--sqthread_poll=1 --registerfiles=1 --fixedbufs=1" }
+#    hooks: ["xnvme"]
+#    testcases:
+#      - xnvme_fioe_compare.sh
+#
+#  - name: XNVME_FIOE_COMPARE_QD1_XNVME_URING_RF
+#    alias: "xNVMe/uring"
+#    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--registerfiles=1" }
+#    hooks: ["xnvme"]
+#    testcases:
+#      - xnvme_fioe_compare.sh
+#
+#  - name: XNVME_FIOE_COMPARE_QD1_XNVME_URING_IOP_RF
+#    alias: "xNVMe/uring with IOP"
+#    evars: { FIOE_SECTION: "qd1", FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "--hipri=1 --registerfiles=1" }
+#    hooks: ["xnvme"]
+#    testcases:
+#      - xnvme_fioe_compare.sh
+
+# SPDK
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_SPDK
+    alias: "Regular/SPDK"
+    evars:
+      FIOE_SECTION: "qd1"
+      CMD_PREFIX: " "
+      FIOE_NAME: "spdk"
+      FIOE_BIN: "/root/git/fio/fio"
+      XNVME_BE: "SPDK"  # Set this to have the xnvme hook detach the driver
+# Make sure these are set in your environment
+#      SPDK_FIOE_SO: "/root/git/spdk-for-fio/examples/nvme/fio_plugin/fio_plugin"
+#      SPDK_FIOE_URI: "trtype=PCIe traddr=0000.01.00.0 ns=1"
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD2_REGLR_SPDK
+    alias: "Regular/SPDK"
+    evars:
+      FIOE_SECTION: "qd2"
+      CMD_PREFIX: " "
+      FIOE_NAME: "spdk"
+      FIOE_BIN: "/root/git/fio/fio"
+      XNVME_BE: "SPDK"  # Set this to have the xnvme hook detach the driver
+# Make sure these are set in your environment
+#      SPDK_FIOE_SO: "/root/git/spdk-for-fio/examples/nvme/fio_plugin/fio_plugin"
+#      SPDK_FIOE_URI: "trtype=PCIe traddr=0000.01.00.0 ns=1"
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD4_REGLR_SPDK
+    alias: "Regular/SPDK"
+    evars:
+      FIOE_SECTION: "qd2"
+      CMD_PREFIX: " "
+      FIOE_NAME: "spdk"
+      FIOE_BIN: "/root/git/fio/fio"
+      XNVME_BE: "SPDK"  # Set this to have the xnvme hook detach the driver
+# Make sure these are set in your environment
+#      SPDK_FIOE_SO: "/root/git/spdk-for-fio/examples/nvme/fio_plugin/fio_plugin"
+#      SPDK_FIOE_URI: "trtype=PCIe traddr=0000.01.00.0 ns=1"
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+
+  - name: XNVME_FIOE_COMPARE_QD16_REGLR_SPDK
+    alias: "Regular/SPDK"
+    evars:
+      FIOE_SECTION: "qd16"
+      CMD_PREFIX: " "
+      FIOE_NAME: "spdk"
+      FIOE_BIN: "/root/git/fio/fio"
+      XNVME_BE: "SPDK"  # Set this to have the xnvme hook detach the driver
+# Make sure these are set in your environment
+#      SPDK_FIOE_SO: "/root/git/spdk-for-fio/examples/nvme/fio_plugin/fio_plugin"
+#      SPDK_FIOE_URI: "trtype=PCIe traddr=0000.01.00.0 ns=1"
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+# xNVMe/SPDK
+  - name: XNVME_FIOE_COMPARE_QD1_XNVME_SPDK
+    alias: "xNVMe/spdk"
+    evars:
+      FIOE_SECTION: "qd1"
+      FIOE_NAME: "xnvme"
+      XNVME_BE: "SPDK"
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD2_XNVME_SPDK
+    alias: "xNVMe/spdk"
+    evars:
+      FIOE_SECTION: "qd2"
+      FIOE_NAME: "xnvme"
+      XNVME_BE: "SPDK"
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD4_XNVME_SPDK
+    alias: "xNVMe/spdk"
+    evars:
+      FIOE_SECTION: "qd4"
+      FIOE_NAME: "xnvme"
+      XNVME_BE: "SPDK"
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD16_XNVME_SPDK
+    alias: "xNVMe/spdk"
+    evars:
+      FIOE_SECTION: "qd16"
+      FIOE_NAME: "xnvme"
+      XNVME_BE: "SPDK"
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh

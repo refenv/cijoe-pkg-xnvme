@@ -1,0 +1,54 @@
+descr: xNVMe binary smoketest
+descr_long: |
+  Verify that tools are invokable e.g. binaries linked and runtimes loadable
+evars: { NVME_NSTYPE: "lblk" , HUGEMEM: "4096" }
+testsuites:
+  - name: XNVME_SMOKE_SPDK
+    alias: "xNVMe:smoke: verification of base functionality using be:spdk"
+    hooks: ["xnvme"]
+    evars: { XNVME_BE: "SPDK" }
+    testcases:
+      - xnvme_info.sh
+      - xnvme_library_info.sh
+      - xnvme_enum.sh
+      - xnvme_fio_101.sh
+
+  - name: XNVME_SMOKE_LIOC
+    alias: "xNVMe:smoke: verification of base functionality using be:lioc"
+    hooks: ["xnvme"]
+    evars: { XNVME_BE: "LIOC" }
+    testcases:
+      - xnvme_info.sh
+      - xnvme_library_info.sh
+      - xnvme_enum.sh
+      - xnvme_fio_101.sh
+
+  - name: XNVME_SMOKE_LIOU
+    alias: "xNVMe:smoke: verification of base functionality using be:liou"
+    hooks: ["xnvme"]
+    evars: { XNVME_BE: "LIOU" }
+    testcases:
+      - xnvme_info.sh
+      - xnvme_library_info.sh
+      - xnvme_enum.sh
+      - xnvme_fio_101.sh
+
+  - name: XNVME_SMOKE_LAIO
+    alias: "xNVMe:smoke: verification of base functionality using be:laio"
+    hooks: ["xnvme"]
+    evars: { XNVME_BE: "LAIO" }
+    testcases:
+      - xnvme_info.sh
+      - xnvme_library_info.sh
+      - xnvme_enum.sh
+      - xnvme_fio_101.sh
+
+  - name: XNVME_SMOKE_FIOC
+    alias: "xNVMe:smoke: verification of base functionality using be:fioc"
+    hooks: ["xnvme"]
+    evars: { XNVME_BE: "FIOC" }
+    testcases:
+      - xnvme_info.sh
+      - xnvme_library_info.sh
+      - xnvme_enum.sh
+      - xnvme_fio_101.sh

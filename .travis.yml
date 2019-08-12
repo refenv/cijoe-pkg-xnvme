@@ -1,0 +1,45 @@
+language: python
+
+dist: xenial
+
+python:
+- "2.7"
+- "3.4"
+- "3.5"
+- "3.6"
+- "3.7"
+
+branches:
+  except:
+  - gh-pages
+
+addons:
+  apt:
+    packages:
+    - graphviz
+    - shellcheck
+    - python-pip
+
+before_install:
+- pip install -U pip
+- pip install pylint
+
+install:
+- make release-build
+- make install-system
+
+script:
+- make selftest
+
+after_script:
+- find selftest_results -name "*.log" -exec cat {} \;
+
+deploy:
+  provider: pypi
+  skip_existing: true
+  on:
+    tags: true
+  user:
+    secure: dwxA7DBOPZXZW1fulJ1siMZ45m4D+D9viURhckUcyKfu+xeH1Xwj8Uwer5r+4rcqsaFoqGT5o3b3ABPaq3Bgt0q3dWXBtJ1z85SlSS6jqzmmNRBF4pcJ4o+fv1m3zPZWKyTsK+v6I8AWVUgbv8nMLeK39e9oRrGW2aIqCJ44HYbTVgoFfmxwUVOhK3eJI7n9mhp1sx4CVFUYS5qL7a0EdUl09f3ZipUlDMN16PwffjfVqRcOuYxLn+0W+TVeDxORAB7XqnAPSMeAFJAV+ANzUVTxMCq1gsPF31sekAvc5M2y5o1xFQG+gClXn0yXgdt4f87oCFOU88kJpJZOvdLlVLRm4PvBRk/6Z1Z7FJJ66BCAz8bJiWRq/Nz0o0K5eY/BqQ8uqcOEJ5XYnBMKsP4dbNxI5vr9qSJj1Q0ghW+BDyRu66qJ/XGJxAetPYdX3o/tU+rHeSUET0xtiKET3YDjUUuTzTzRa4QkCWlTmFta1sc2IVUwdJ9KjEL1BNn1y0/nyf9X03r36MCotsvNXw6YevQ3BoTsxNgjiR+Ewlb8xG8QyqxfFYQDYH7L8KFYmsC8lbYAtN0fQsyH1C+W5fNXK7WrlY6riTqFpkN+VPC10nu+aCHagK8J8hmAwogw5cAXkloCYbolFrufSD31SG/fQpjJ6i3BGOmeLevIAjq0z9s=
+  password:
+    secure: oarLEyKy4ype5nALDthANaTMhZWSq9lJ9iymWuk6XBLaABwjVjcg/ON/Ep6yeQd9Yjrb/luVX1W0f/8i+QymuejUI75/KGCExicGUlbARo1sMbYwfj9V9H/90TIoaVqKs2G7dhT94Tq66oKpLHvChulpszMd/kQ7s0eGxTlXt0AdtoBtpEuKUq6wJhNHxaBGVTrIrtLp6aIE5r20buUU8Tn0BKgAOZIaZzUPCovHKT2aJ2kRUQQe4vTCVmQDe34m+Fsr5Ooj5dxjlwCuz1NpVpM1eYh9rh7IhwZfseZz8sK2w/vvlnZPZ2uznMN+mE+zxt2OzSgxA99JE19xqqtfuoQfiEe8wGx16DrwzqSZYlTfdbzO9be61IGwhHFRnFLWuZQrIlSJZouxNanvnZ73MJVMYUfK9WYpBaloYvB8DWSMnhXkzgZKDYre+f9V6ZJsBJRCEg6jIYmSIlzwIyS9ywKcRV4ODVlWZHmRe2U0qZqKU15TfelncUrcTZGYo+/E5j3vO4x1OrLM7xnZp8ZdEj5BV5UCHnk+Wv5lAWsTe+62WiZDLJGMZS8M7SoSpQPfTdMYisMJWFmYjg0NAjRIOux8uQltKso11pa6U6z6SOd5upD51Y3E+La1unbLrqndsAVEF6Eq0qT1qOtq77rbKwHqKPUsx1+rvixK8Gb/Bys=
