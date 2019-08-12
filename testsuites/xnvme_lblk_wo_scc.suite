@@ -1,0 +1,11 @@
+lblk_enum.sh
+lblk_idfy.sh
+lblk_info.sh
+lblk_read.sh
+lblk_write.sh
+xnvme_tests_lblk_io.sh
+xnvme_tests_lblk_scopy.sh
+xnvme_tests_scc_idfy.sh
+xnvme_tests_scc_scopy_msrc_sync.sh
+xnvme_tests_scc_scopy_sync.sh
+xnvme_tests_scc_support.sh

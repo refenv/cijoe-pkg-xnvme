@@ -1,0 +1,30 @@
+descr: Basic verification of xNVMe/Zoned on Linux
+descr_long: |
+  Basic Verification of xNVMe and the Zoned Command Set.
+  See 'envs/refenv-xnvme.sh' for an example of defining an environment for this
+  testplan. The testplan relies on the two environment variables
+  XNVME_BE
+  XNVME_URI
+  Please define the environment variable XNVME_BE either in the environment
+  definition or in the testplan variables below. The xnvme-hook uses it to
+  determie whether or not to unload the kernel NVMe driver
+  The backend be:lioc is not explicitly exercised here since it does not support
+  async, however, everything which be:lioc supports is exercised via be:laio,
+  and be:liou
+  The backend be:fioc is not exercised here since it is for FreeBSD. The tests
+  for append via Linux kernel are not run, as they are not yet supported by
+  upstream kernels.
+hooks: ["sysinf"]
+testsuites:
+  - name: xnvme_zoned_wo_append
+    alias: "xNVMe:zoned/be:laio: verify zoned functionality using be:laio"
+    evars: { NVME_NSTYPE: "zoned", XNVME_BE: "LAIO" }
+    hooks: ["xnvme"]
+  - name: xnvme_zoned_wo_append
+    alias: "xNVMe:zoned/be:liou: verify zoned functionality using be:liou"
+    evars: { NVME_NSTYPE: "zoned", XNVME_BE: "LIOU" }
+    hooks: ["xnvme"]
+  - name: xnvme_zoned
+    alias: "xNVMe:zoned/be:spdk: verify zoned functionality using be:spdk"
+    evars: { NVME_NSTYPE: "zoned", XNVME_BE: "SPDK", HUGEMEM: "4096" }
+    hooks: ["xnvme"]
