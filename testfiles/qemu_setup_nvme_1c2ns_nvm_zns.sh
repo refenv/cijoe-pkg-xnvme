@@ -29,7 +29,7 @@ qemu_setup_pcie() {
   _args="${_args} -device xio3130-downstream,id=pcie_downstream_port1,bus=pcie_upstream_port1,chassis=2,slot=1"
 
   # Create the NVMe Controller configuration args
-  _args="${_args} -device nvme,id=${_ctrlr_ident},serial=deadbeef,bus=pcie_downstream_port1,mdts=${_ctrlr_mdts},persistent-state=off"
+  _args="${_args} -device nvme,id=${_ctrlr_ident},serial=deadbeef,bus=pcie_downstream_port1,mdts=${_ctrlr_mdts}"
 
   # Create the NVM Namespace backing image and QEMU configuration args
   qemu::img_create "${_ns_nvm_ident}" "raw" "${_ns_nvm_size}"
