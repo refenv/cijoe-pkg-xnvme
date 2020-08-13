@@ -33,7 +33,7 @@ qemu_setup_pcie() {
 
   # Create the NVM Namespace backing image and QEMU configuration args
   qemu::img_create "${_ns_nvm_ident}" raw ${_ns_nvm_size}
-  _args="${_args} $(qemu::args_drive ${_ns_nvm_ident}raw)"
+  _args="${_args} $(qemu::args_drive ${_ns_nvm_ident} raw)"
   _args="${_args} -device nvme-ns,id=${_ns_nvm_ident},drive=${_ns_nvm_ident},bus=${_ns_nvm_ident},nsid=${_ns_nvm_nsid},lbads=${_ns_nvm_lbads}"
 
   # Create the Zoned Namepsace backing images and QEMU configuration args
