@@ -26,7 +26,7 @@ setup(
     url="https://github.com/refenv/cijoe-pkg-xnvme",
     license="Apache License 2.0",
     install_requires=[
-        "cijoe (>=0.0.36)"
+        "cijoe (>=0.0.36.dev0)"
     ],
     zip_safe=False,
     data_files=[
