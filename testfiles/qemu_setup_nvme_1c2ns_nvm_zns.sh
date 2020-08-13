@@ -24,9 +24,9 @@ qemu_setup_pcie() {
   local _args=""
 
   # Create the PCIe configuration args
-  _args="${_args} -device pcie-root-port,id=pcie_root_port1,chassis=1,slot=1"
-  _args="${_args} -device x3130-upstream,id=pcie_upstream_port1,bus=pcie_root_port1"
-  _args="${_args} -device xio3130-downstream,id=pcie_downstream_port1,bus=pcie_upstream_port1,chassis=2,slot=1"
+  _args="${_args} -device pcie-root-port,id=pcie_root_port1,chassis=1,slot=1,"
+  _args="${_args} -device x3130-upstream,id=pcie_upstream_port1,bus=pcie_root_port1,"
+  _args="${_args} -device xio3130-downstream,id=pcie_downstream_port1,bus=pcie_upstream_port1,chassis=2,slot=1,"
 
   # Create the NVMe Controller configuration args
   _args="${_args} -device nvme,id=${_ctrlr_ident},serial=deadbeef,bus=pcie_downstream_port1,mdts=${_ctrlr_mdts}"
