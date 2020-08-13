@@ -16,7 +16,7 @@ qemu_setup_pcie() {
   local _ns_nvm_size="8G"
   local _ns_nvm_ident="${_ctrlr_ident}n${_ns_nvm_nsid}"
 
-  local _ns_zns_nsid=1
+  local _ns_zns_nsid=2
   local _ns_zns_lbads=12
   local _ns_zns_size="8G"
   local _ns_zns_ident="${_ctrlr_ident}n${_ns_zns_nsid}"
