@@ -49,5 +49,5 @@ qemu_setup_pcie() {
   _args="${_args},zns.mar=383"
   _args="${_args},zns.mor=383"
 
-  echo ${_args}
+  : "${QEMU_SETUP_PCIE=${_args}}"; export QEMU_SETUP_PCIE
 }
