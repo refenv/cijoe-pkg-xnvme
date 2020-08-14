@@ -12,7 +12,7 @@ descr_long: |
 #evars: { XNVME_BE: "FIOC" }
 #evars: { XNVME_BE: "LIOC" }
 #evars: { XNVME_BE: "LIOU" }
-hooks: ["xnvme"]
+hooks: ["sysinf", "xnvme"]
 testsuites:
   - name: XNVME_BASE
     alias: "xNVMe:base: verification of base functionality"
