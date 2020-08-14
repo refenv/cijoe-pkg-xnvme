@@ -24,9 +24,9 @@ qemu_setup_pcie() {
   local _args=""
 
   # Create the PCIe configuration args
-  _args="${_args} -device pcie-root-port,id=pcie_root_port1,chassis=1,slot=1,"
-  _args="${_args} -device x3130-upstream,id=pcie_upstream_port1,bus=pcie_root_port1,"
-  _args="${_args} -device xio3130-downstream,id=pcie_downstream_port1,bus=pcie_upstream_port1,chassis=2,slot=1,"
+  _args="${_args} -device pcie-root-port,id=pcie_root_port1,chassis=1,slot=1"
+  _args="${_args} -device x3130-upstream,id=pcie_upstream_port1,bus=pcie_root_port1"
+  _args="${_args} -device xio3130-downstream,id=pcie_downstream_port1,bus=pcie_upstream_port1,chassis=2,slot=1"
 
   # Create the NVMe Controller configuration args
   _args="${_args} -device nvme,id=${_ctrlr_ident},serial=deadbeef,bus=pcie_downstream_port1,mdts=${_ctrlr_mdts}"
@@ -34,7 +34,7 @@ qemu_setup_pcie() {
   # Create the NVM Namespace backing image and QEMU configuration args
   qemu::img_create "${_ns_nvm_ident}" "raw" "${_ns_nvm_size}"
   _args="${_args} $(qemu::args_drive ${_ns_nvm_ident} raw)"
-  _args="${_args} -device nvme-ns,id=${_ns_nvm_ident},drive=${_ns_nvm_ident},bus=${_ns_nvm_ident},nsid=${_ns_nvm_nsid},lbads=${_ns_nvm_lbads}"
+  _args="${_args} -device nvme-ns,id=${_ns_nvm_ident},drive=${_ns_nvm_ident},bus=${_ctrlr_ident},nsid=${_ns_nvm_nsid},lbads=${_ns_nvm_lbads}"
 
   # Create the Zoned Namepsace backing images and QEMU configuration args
   qemu::img_create "${_ns_zns_ident}" "raw" "${_ns_zns_size}"
