@@ -14,14 +14,17 @@ descr_long: |
   The backend be:fioc is not exercised here since it is for FreeBSD. The tests
   for append via Linux kernel are not run, as they are not yet supported by
   upstream kernels.
-hooks: ["sysinf", "xnvme"]
+hooks: ["sysinf"]
 testsuites:
   - name: xnvme_zoned_wo_append
     alias: "xNVMe:zoned/be:laio: verify zoned functionality using be:laio"
     evars: { NVME_NSTYPE: "zoned", XNVME_BE: "LAIO" }
+    hooks: ["xnvme"]
   - name: xnvme_zoned_wo_append
     alias: "xNVMe:zoned/be:liou: verify zoned functionality using be:liou"
     evars: { NVME_NSTYPE: "zoned", XNVME_BE: "LIOU" }
+    hooks: ["xnvme"]
   - name: xnvme_zoned
     alias: "xNVMe:zoned/be:spdk: verify zoned functionality using be:spdk"
     evars: { NVME_NSTYPE: "zoned", XNVME_BE: "SPDK", HUGEMEM: "4096" }
+    hooks: ["xnvme"]

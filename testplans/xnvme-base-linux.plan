@@ -12,14 +12,17 @@ descr_long: |
   async, however, everything which be:lioc supports is exercised via be:laio,
   and be:liou
   The backend be:fioc is not exercised here since it is for FreeBSD.
-hooks: ["sysinf", "xnvme"]
+hooks: ["sysinf"]
 testsuites:
   - name: xnvme_base
     alias: "xNVMe:base/be:laio: verify base functionality using be:laio"
     evars: { NVME_NSTYPE: "lblk", XNVME_BE: "LAIO" }
+    hooks: ["xnvme"]
   - name: xnvme_base
     alias: "xNVMe:base/be:liou: verify base functionality using be:liou"
     evars: { NVME_NSTYPE: "lblk", XNVME_BE: "LIOU" }
+    hooks: ["xnvme"]
   - name: xnvme_base
     alias: "xNVMe:base/be:spdk: verify base functionality using be:spdk"
     evars: { NVME_NSTYPE: "lblk", XNVME_BE: "SPDK", HUGEMEM: "4096" }
+    hooks: ["xnvme"]
