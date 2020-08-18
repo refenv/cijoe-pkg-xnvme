@@ -8,12 +8,18 @@ descr_long: |
   Please define the environment variable XNVME_BE either in the environment
   definition or in the testplan variables below. The xnvme-hook uses it to
   determie whether or not to unload the kernel NVMe driver
+  The backend be:lioc is not explicitly exercised here since it does not support
+  async, however, everything which be:lioc supports is exercised via be:laio,
+  and be:liou
+  The backend be:fioc is not exercised here since it is for FreeBSD. The tests
+  for append via Linux kernel are not run, as they are not yet supported by
+  upstream kernels.
 hooks: ["sysinf", "xnvme"]
 testsuites:
-  - name: xnvme_zoned
+  - name: xnvme_zoned_wo_append
     alias: "xNVMe:zoned/be:laio: verify zoned functionality using be:laio"
     evars: { NVME_NSTYPE: "zoned", XNVME_BE: "LAIO" }
-  - name: xnvme_zoned
+  - name: xnvme_zoned_wo_append
     alias: "xNVMe:zoned/be:liou: verify zoned functionality using be:liou"
     evars: { NVME_NSTYPE: "zoned", XNVME_BE: "LIOU" }
   - name: xnvme_zoned
