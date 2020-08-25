@@ -40,6 +40,9 @@ fi
 if [[ -v XNVME_BE && -v NVME_NSTYPE ]]; then
 
   case $XNVME_BE in
+  NWRP)
+    : "${XNVME_URI=nwrp:///dev/nvme${NVME_CNTID}n${NVME_NSID}}"
+    ;;
   LIOC)
     : "${XNVME_URI=lioc:///dev/nvme${NVME_CNTID}n${NVME_NSID}}"
     ;;

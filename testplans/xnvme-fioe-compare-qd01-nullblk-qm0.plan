@@ -1,0 +1,93 @@
+descr: xNVMe IO comparison using the Flexible I/O Tester (fio)
+descr_long: |
+  Run fio random-read at io-depth 1 with 4K payloads.
+evars:
+  NVME_NSTYPE: "lblk"
+  NVME_DEV_NAME: "nullb0"
+  NVME_DEV_PATH: "/dev/nullb0"
+  XNVME_DEV_PATH: "/dev/nullb0"
+  # Null block -- Queue Mode
+  # 0: Bio-based, 2: Multi-Queue
+  # Do not run with --hipri when using bio-based(0) queue_mode
+  NULLBLK_DEV: "/dev/nullb0"
+  NULLBLK_QUEUE_MODE: "0"
+  # Null block -- IRQ Mode
+  # 0: None, 1: soft-irq, 2: timer
+  NULLBLK_IRQMODE: "0"
+  #CMD_PREFIX: "taskset -c 2 perf stat"
+  CMD_PREFIX: " "
+  FIO_BIN: "/opt/aux/fio"
+  FIO_NRUNS: "3"
+  FIO_SCRIPT: "xnvme-compare.fio"
+  FIO_SECTION: "qd1"
+hooks: ["dmesg", "sysinf", "nullblk"]
+testsuites:
+  # These are for the built-in fio engines: libaio, and io_uring
+  - name: REGLR_LAIO
+    alias: "Regular/laio"
+    evars: { FIO_IOENG_NAME: "libaio", XNVME_BE: "LAIO", FIO_AUX: "" }
+    testcases:
+      - xnvme_fioe.sh
+
+  - name: REGLR_LIOU,SQT=0,IOP=0,RF=0,FB=0
+    alias: "Regular/liou"
+    evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "LIOU", FIO_AUX: "--sqthread_poll=0 --hipri=0 --registerfiles=0 --fixedbufs=0" }
+    testcases:
+      - xnvme_fioe.sh
+
+  - name: REGLR_LIOU,SQT=0,IOP=0,RF=1,FB=0
+    alias: "Regular/liou"
+    evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "LIOU", FIO_AUX: "--sqthread_poll=0 --hipri=0 --registerfiles=1 --fixedbufs=0" }
+    testcases:
+      - xnvme_fioe.sh
+
+  - name: REGLR_LIOU,SQT=0,IOP=0,RF=0,FB=1
+    alias: "Regular/liou"
+    evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "LIOU", FIO_AUX: "--sqthread_poll=0 --hipri=0 --registerfiles=0 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe.sh
+
+  - name: REGLR_LIOU,SQT=1,IOP=0,RF=1,FB=0
+    alias: "Regular/liou"
+    evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "LIOU", FIO_AUX: "--sqthread_poll=1 --hipri=0 --registerfiles=1 --fixedbufs=0" }
+    testcases:
+      - xnvme_fioe.sh
+
+  - name: REGLR_LIOU,SQT=1,IOP=0,RF=1,FB=1
+    alias: "Regular/liou"
+    evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "LIOU", FIO_AUX: "--sqthread_poll=1 --hipri=0 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe.sh
+
+  #
+  # These use the external xNVMe fio io-engine libxnvme-fio-engine.so
+  # With backends: laio and liou
+  #
+  - name: XNVME_NWRP
+    alias: "xNVMe/nwrp"
+    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "NWRP", FIO_AUX: "" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe.sh
+
+  - name: XNVME_LAIO
+    alias: "xNVMe/laio"
+    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "LAIO", FIO_AUX: "" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe.sh
+
+  - name: XNVME_LIOU,SQT=0,IOP=0,RF=1,FB=0
+    alias: "xNVMe/liou"
+    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "LIOU", FIO_AUX: "--sqthread_poll=0" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe.sh
+
+  - name: XNVME_LIOU,SQT=1,IOP=0,RF=1,FB=0
+    alias: "xNVMe/liou"
+    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "LIOU", FIO_AUX: "--sqthread_poll=1" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe.sh
+

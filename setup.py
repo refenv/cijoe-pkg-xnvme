@@ -18,7 +18,7 @@ def read(*parts):
 
 setup(
     name="cijoe-pkg-xnvme",
-    version="0.0.19",
+    version="0.0.20",
     description="CIJOE: xNVMe package",
     long_description=read('README.rst'),
     author="Simon A. F. Lund",
@@ -26,14 +26,16 @@ setup(
     url="https://github.com/refenv/cijoe-pkg-xnvme",
     license="Apache License 2.0",
     install_requires=[
-        "cijoe (>=0.0.36.dev0)"
+        "cijoe (>=0.0.36)"
     ],
     zip_safe=False,
     data_files=[
-        ("share/cijoe/envs", glob.glob("envs/*")),
+        ("bin", glob.glob("bin/*")),
 
         ("share/cijoe/hooks", glob.glob("hooks/*")),
         ("share/cijoe/modules", glob.glob("modules/*.sh")),
+
+        ("share/cijoe/envs", glob.glob("envs/*")),
 
         ("share/cijoe/testfiles", glob.glob("testfiles/*")),
         ("share/cijoe/testcases", glob.glob("testcases/*")),
