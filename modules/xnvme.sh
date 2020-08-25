@@ -34,9 +34,9 @@ xnvme::env() {
 #
 xnvme::fioe() {
   if [[ -z "$1" || -z "$2" ]]; then
-    cij::err "usage: xnvme::fioe_compare('fio-script.fname', 'ioengine_name')"
+    cij::err "usage: xnvme::fioe('fio-script.fname', 'ioengine_name')"
     cij::err " or"
-    cij::err "usage: xnvme::fioe_compare('fio-script.fname', 'ioengine_name', 'section')"
+    cij::err "usage: xnvme::fioe('fio-script.fname', 'ioengine_name', 'section')"
     return 1
   fi
 
@@ -45,63 +45,98 @@ xnvme::fioe() {
     return 1
   fi
 
-  : "${XNVME_URI:?Must be set and non-empty}"
   : "${CMD_PREFIX:=taskset -c 1 perf stat}"
-  : "${FIOE_BIN:=fio}"
+  : "${FIO_BIN:=fio}"
 
   local script_fname=$1
   local ioengine_name=$2
   local section=$3
-  if [[ -z "$section" ]]; then
-    section="default"
-  fi
+  local output_fpath=$4
+
   local jobfile="${XNVME_SHARE_ROOT}/${script_fname}"
+  local _cmd
 
-  local fioe_so="${XNVME_LIB_ROOT}/libxnvme-fio-engine.so"
-  local fioe_cmd
-  local fioe_uri
-  local fioe_uri_opts
-
-  if ! ssh::cmd "[[ -f \"${fioe_so}\" ]]"; then
-    cij::err "xnvme:fio_compare: '${fioe_so}' does not exist!"
-    return 1
-  fi
   if ! ssh::cmd "[[ -f \"${jobfile}\" ]]"; then
     cij::err "xnvme:fio_compare: '${jobfile}' does not exist!"
     return 1
   fi
 
-  fioe_cmd="${CMD_PREFIX} ${FIOE_BIN} ${jobfile}"
-  fioe_cmd="${fioe_cmd} --section=${section}"
+  _cmd="${CMD_PREFIX} ${FIO_BIN} ${jobfile}"
+  _cmd="${_cmd} --section=${section}"
 
   # Add the special-sauce for the external xNVMe fio engine
   if [[ "$ioengine_name" == *"xnvme"* ]]; then
-    fioe_uri=${XNVME_URI//:/\\\\:}
+    : "${XNVME_URI:?Must be set and non-empty}"
 
+    local fioe_so="${XNVME_LIB_ROOT}/libxnvme-fio-engine.so"
+    local fioe_uri
+    local fioe_uri_opts
+
+    if ! ssh::cmd "[[ -f \"${fioe_so}\" ]]"; then
+      cij::err "xnvme:fio_compare: '${fioe_so}' does not exist!"
+      return 1
+    fi
+
+    fioe_uri=${XNVME_URI//:/\\\\:}
     fioe_uri_opts=""
     if [[ "$XNVME_URI" == *"/dev/nullb"* ]]; then
       fioe_uri_opts="${fioe_uri_opts}?pseudo=1"
     fi
 
-    fioe_cmd="${fioe_cmd} --ioengine=external:${fioe_so}"
-    fioe_cmd="${fioe_cmd} --filename=${fioe_uri}${fioe_uri_opts}"
-  elif [[ "$ioengine_name" == "spdk" ]]; then
-    fioe_cmd="LD_PRELOAD=${SPDK_FIOE_SO} ${fioe_cmd}"
-    fioe_cmd="${fioe_cmd} --ioengine=${ioengine_name}"
-    fioe_cmd="${fioe_cmd} --filename=\"${SPDK_FIOE_URI}\""
+    _cmd="${_cmd} --ioengine=external:${fioe_so}"
+    _cmd="${_cmd} --filename=${fioe_uri}${fioe_uri_opts}"
+
+  # Add the special-sauce for the external SPDK io-engine spdk_nvme
+  elif [[ "$ioengine_name" == "spdk_nvme" ]]; then
+
+    local _traddr=${PCI_DEV_NAME//:/.};
+
+    _cmd="LD_PRELOAD=${SPDK_FIOE_ROOT}/${ioengine_name} ${_cmd}"
+    _cmd="${_cmd} --ioengine=spdk"
+    _cmd="${_cmd} --filename=\"trtype=PCIe traddr=${_traddr} ns=${NVME_NSID}\""
+
+  # Add the special-sauce for the external SPDK/nvme_bdev
+  elif [[ "$ioengine_name" == "spdk_bdev" ]]; then
+    # Produce SPDK config-file
+    echo "[Nvme]" > /tmp/spdk.bdev.conf
+    echo "  TransportID \"trtype:PCIe traddr:${PCI_DEV_NAME}\" Nvme0" >> /tmp/spdk.bdev.conf
+    ssh::push /tmp/spdk.bdev.conf /opt/aux/spdk.bdev.conf
+
+    _cmd="LD_PRELOAD=${SPDK_FIOE_ROOT}/${ioengine_name} ${_cmd}"
+    _cmd="${_cmd} --ioengine=${ioengine_name}"
+    _cmd="${_cmd} --spdk_conf=${SPDK_FIOE_ROOT}/spdk.bdev.conf"
+    _cmd="${_cmd} --filename=Nvme0n1"
+
+  # Add the not-so-special-sauce for built-in io-engines
   else
-    fioe_cmd="${fioe_cmd} --ioengine=${ioengine_name}"
-    fioe_cmd="${fioe_cmd} --filename=${XNVME_DEV_PATH}"
+    _cmd="${_cmd} --ioengine=${ioengine_name}"
+    _cmd="${_cmd} --filename=${NVME_DEV_PATH}"
   fi
 
-  if [[ -v FIOE_AUX ]]; then
-    fioe_cmd="${fioe_cmd} ${FIOE_AUX}"
+  if [[ -v FIO_AUX ]]; then
+    _cmd="${_cmd} ${FIO_AUX}"
   fi
 
-  if ! ssh::cmd "${fioe_cmd}"; then
-    cij::err "xnvme:fio_compare: error running fio"
+  local _trgt_fname="/tmp/fio-output.txt"
+
+  _cmd="${_cmd} --output-format=normal,json --output=${_trgt_fname}"
+
+  # Now run that fio tester!
+  if ! ssh::cmd "${_cmd}"; then
+    cij::err "xnvme::fioe: error running fio"
+
+    ssh::pull "${_trgt_fname}" "${output_fpath}"
     return 1
   fi
+
+  # Download the output
+  if ! ssh::pull "${_trgt_fname}" "${output_fpath}"; then
+    cij::err "xnvme::fioe: failed pulling down fio output-file"
+    return 0
+  fi
+
+  # Dump it to stdout for prosperity
+  cat "${output_fpath}"
 
   return 0
 }

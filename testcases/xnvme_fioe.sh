@@ -18,12 +18,15 @@ export CIJ_TEST_NAME
 source "$CIJ_ROOT/modules/cijoe.sh"
 test::enter
 
+: "${FIO_IOENG_NAME:?Must be set and non-empty}"
+
 : "${FIO_NRUNS:=1}"
-: "${FIO_SECTION:=default}"
+: "${FIO_SCRIPT:?Must be set and non-empty}"
+: "${FIO_SECTION:?Must be set and non-empty}"
 
 for i in $(seq "$FIO_NRUNS"); do
   cij::info "run: ${i}/${FIO_NRUNS}"
-  if ! xnvme::fioe "xnvme-compare.fio" "${FIO_IOENG_NAME}" "${FIO_SECTION}"; then
+  if ! xnvme::fioe "${FIO_SCRIPT}" "${FIO_IOENG_NAME}" "${FIO_SECTION}" "${CIJ_TEST_AUX_ROOT}/fio-output-${i}.txt"; then
     test::fail
   fi
 done

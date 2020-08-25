@@ -42,10 +42,9 @@ done
 
 for i in $(seq "$FIO_NRUNS"); do
   cij::info "run: ${i}/${FIO_NRUNS}"
-  if ! ssh::cmd  "fio ${args}"; then
+  if ! ssh::cmd  "${FIO_BIN} ${args}"; then
     test::fail
   fi
 done
-
 
 test::pass
