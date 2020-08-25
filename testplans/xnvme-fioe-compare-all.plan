@@ -1,0 +1,67 @@
+descr: xNVMe IO comparison using the Flexible I/O Tester (fio)
+descr_long: |
+  This testplans compares, e.g. executes fio using the following backends
+  liou
+  liou with poll_io=1
+  liou with poll_sq=1
+  liou with poll_sq=1 and poll_io=1
+  spdk
+  Also, runs regular io_uring for comparison
+evars:
+  #CMD_PREFIX: "taskset -c 2 perf stat"
+  CMD_PREFIX: ""
+  NVME_NSTYPE: "lblk"
+  FIOE_NRUNS: "3"
+  FIOE_SECTION: "qd1"
+hooks: ["dmesg"]
+testsuites:
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_LAIO
+    alias: "Regular/laio"
+    evars: { FIOE_NAME: "libaio", FIOE_AUX: "" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_LIOU
+    alias: "Regular/liou"
+    evars: { FIOE_NAME: "io_uring", FIOE_AUX: "" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_LIOU_RF_FB
+    alias: "Regular/liou +RF +FB"
+    evars: { FIOE_NAME: "io_uring", FIOE_AUX: "--registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_LIOU_RF_FB_IOP
+    alias: "Regular/liou +IOP +RF +FB"
+    evars: { FIOE_NAME: "io_uring", FIOE_AUX: "--hipri=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_REGLR_LIOU_RF_FB_SQT
+    alias: "Regular/liou +SQT +RF +FB"
+    evars: { FIOE_NAME: "io_uring", FIOE_AUX: "--sqthread_poll=1 --registerfiles=1 --fixedbufs=1" }
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_XNVME_LAIO
+    alias: "xNVMe/laio"
+    evars: { FIOE_NAME: "xnvme", XNVME_BE: "LAIO", FIOE_AUX: "" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_XNVME_LIOU
+    alias: "xNVMe/liou"
+    evars: { FIOE_NAME: "xnvme", XNVME_BE: "LIOU", FIOE_AUX: "" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
+
+  - name: XNVME_FIOE_COMPARE_QD1_XNVME_SPDK
+    alias: "xNVMe/spdk"
+    evars: { FIOE_NAME: "xnvme", XNVME_BE: "SPDK", FIOE_AUX: "" }
+    hooks: ["xnvme"]
+    testcases:
+      - xnvme_fioe_compare.sh
