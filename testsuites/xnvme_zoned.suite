@@ -17,3 +17,4 @@ examples-zoned_io_async_write.sh
 examples-zoned_io_async_read.sh
 examples-zoned_io_async_append.sh
 xnvme_tests_znd_append.sh
+xnvme_fioe.sh

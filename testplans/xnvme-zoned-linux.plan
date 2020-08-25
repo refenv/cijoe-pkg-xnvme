@@ -14,6 +14,12 @@ descr_long: |
   The backend be:fioc is not exercised here since it is for FreeBSD. The tests
   for append via Linux kernel are not run, as they are not yet supported by
   upstream kernels.
+evars:
+  CMD_PREFIX: " "
+  FIO_NRUNS: "1"
+  FIO_SECTION: "verify"
+  FIO_SCRIPT: "xnvme-zoned.fio"
+  FIO_IOENG_NAME: "xnvme"
 hooks: ["sysinf"]
 testsuites:
   - name: xnvme_zoned_wo_append
