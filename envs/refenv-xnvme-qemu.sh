@@ -39,7 +39,8 @@
 : "${XNVME_SHARE_ROOT:=/usr/share/xnvme}"; export XNVME_SHARE_ROOT
 
 #
-# xNVMe 1/2: set PCI_DEV_NAME, NVME_CNTID, and NVME_NSID based on NVME_NSTYPE
+# xNVMe: which device is used for testing? set PCI_DEV_NAME, NVME_CNTID, and
+# NVME_NSID based on NVME_NSTYPE
 #
 if [[ -v NVME_NSTYPE ]]; then
   case $NVME_NSTYPE in
@@ -71,14 +72,14 @@ if [[ -v NVME_NSTYPE ]]; then
 fi
 
 #
-# xNVMe: the XNVME_BE should be set by testplan, but a default is provided for
-# running interactively
+# xNVMe: set XNVME_BE if not assigned
+# NOTE: This will be deprecated as the backends are now: LINUX, FBSD, and SPDK
 #
 #: "${XNVME_BE:=SPDK}"
 #: "${XNVME_BE:=FIOC}"
 #: "${XNVME_BE:=LIOC}"
 #: "${XNVME_BE:=LAIO}"
-: "${XNVME_BE:=LIOU}"
+#: "${XNVME_BE:=LIOU}"
 
 #
 # xNVMe: set XNVME_URI and possibly HUGEMEM
@@ -86,21 +87,21 @@ fi
 if [[ -v XNVME_BE && -v NVME_NSTYPE ]]; then
 
   case $XNVME_BE in
-  LIOC)
+  LINUX|LIOU|LIOC)
     : "${XNVME_DEV_PATH:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"
-    : "${XNVME_URI=lioc:${XNVME_DEV_PATH}}"
-    ;;
-  LIOU)
-    : "${XNVME_DEV_PATH:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"
-    : "${XNVME_URI=liou:${XNVME_DEV_PATH}}"
+    : "${XNVME_URI=${XNVME_DEV_PATH}?async=iou}"
     ;;
   LAIO)
     : "${XNVME_DEV_PATH:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"
-    : "${XNVME_URI=laio:${XNVME_DEV_PATH}}"
+    : "${XNVME_URI=${XNVME_DEV_PATH}?async=aio}"
     ;;
-  FIOC)
+  NWRP)
     : "${XNVME_DEV_PATH:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"
-    : "${XNVME_URI=fioc:${XNVME_DEV_PATH}}"
+    : "${XNVME_URI=${XNVME_DEV_PATH}?async=nil}"
+    ;;
+  FBSD|FREEBSD|FIOC)
+    : "${XNVME_DEV_PATH:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"
+    : "${XNVME_URI=${XNVME_DEV_PATH}}"
     ;;
   SPDK)
     : "${XNVME_DEV_PATH:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"
