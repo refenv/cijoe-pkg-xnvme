@@ -19,17 +19,12 @@ hook::xnvme_exit() {
     return 1
   fi
 
-  if [[ ! -v XNVME_BE || -z "$XNVME_BE" ]]; then
+  if [[ ! -v XNVME_BE || -z "${XNVME_BE}" ]]; then
     cij::err "hook::xnvme_exit: XNVME_BE is not set or is the empty string"
     return 1
   fi
 
-  cij::info "hook:xnvme_exit: XNVME_BE($XNVME_BE)"
-
-  if [[ "$XNVME_BE" != "SPDK" ]]; then
-    cij::info "hook::xnvme_exit: not using SPDK driver"
-    return 0
-  fi
+  cij::info "hook:xnvme_exit: XNVME_BE(${XNVME_BE})"
 
   if ! ssh::cmd "xnvme-driver reset"; then
     cij::err "hook::xnvme_exit: FAILED: setting NVMe drivers"

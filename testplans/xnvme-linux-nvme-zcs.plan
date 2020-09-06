@@ -1,0 +1,45 @@
+descr: Verify xNVMe Zoned Command Set using an NVMe device
+descr_long: |
+  Basic verification of xNVMe using through the different IO and control paths.
+hooks: ["sysinf"]
+evars:
+  CMD_PREFIX: " "
+  FIO_NRUNS: "1"
+  FIO_SECTION: "default"
+  FIO_SCRIPT: "xnvme-zoned.fio"
+  FIO_IOENG_NAME: "xnvme"
+  HUGEMEM: "4096"
+  NVME_NSTYPE: "zoned"
+  DEV_TYPE: "nvme"
+
+
+
+
+testsuites:
+  - name: xnvme_zcs_mandatory
+    alias: "xNVMe: verify zoned functionality using be:linux/nvme/thr"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    hooks: [ "xnvme" ]
+  - name: xnvme_zcs_optional
+    alias: "xNVMe: verify zoned functionality using be:linux/nvme/thr"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    hooks: [ "xnvme" ]
+
+  - name: xnvme_zcs_mandatory
+    alias: "xNVMe: verify zoned functionality using be:linux/nvme/aio"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
+    hooks: [ "xnvme" ]
+
+  - name: xnvme_zcs_mandatory
+    alias: "xNVMe: verify zoned functionality using be:linux/nvme/iou"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
+    hooks: [ "xnvme" ]
+
+  - name: xnvme_zcs_mandatory
+    alias: "xNVMe:zoned/be:spdk: verify zoned functionality using be:spdk"
+    evars: { DEV_TYPE: "nvme", XNVME_BE: "spdk" }
+    hooks: [ "xnvme" ]
+  - name: xnvme_zcs_optional
+    alias: "xNVMe:zoned/be:spdk: verify zoned functionality using be:spdk"
+    evars: { DEV_TYPE: "nvme", XNVME_BE: "spdk" }
+    hooks: [ "xnvme" ]

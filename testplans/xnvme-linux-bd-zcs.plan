@@ -1,0 +1,32 @@
+descr: Verify xNVMe Zoned Command Set using an Null-block device
+descr_long: |
+  Basic verification of xNVMe using through the different IO and control paths.
+hooks: ["sysinf"]
+evars:
+  CMD_PREFIX: " "
+  FIO_NRUNS: "1"
+  FIO_SECTION: "default"
+  FIO_SCRIPT: "xnvme-zoned.fio"
+  FIO_IOENG_NAME: "xnvme"
+  HUGEMEM: "4096"
+  NVME_NSTYPE: "zoned"
+  DEV_TYPE: "nullblk"
+  NULLBLK_ZONED: "1"
+  NULLBLK_GB: "14"
+  NULLBLK_NR_DEVICES: "0"
+  NULLBLK_AUTOCONF: "blk_zblk"
+testsuites:
+  - name: xnvme_zcs_mandatory
+    alias: "xNVMe: verify zoned functionality using be:linux/block/thr"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    hooks: [ "xnvme", "nullblk" ]
+
+  - name: xnvme_zcs_mandatory
+    alias: "xNVMe: verify zoned functionality using be:linux/block/aio"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
+    hooks: [ "xnvme", "nullblk" ]
+
+  - name: xnvme_zcs_mandatory
+    alias: "xNVMe: verify zoned functionality using be:linux/block/iou"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
+    hooks: [ "xnvme", "nullblk" ]

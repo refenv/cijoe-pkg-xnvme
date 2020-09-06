@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Verify that `zoned_io_sync` runs without error
+# Verify that `zoned_io_sync append` runs without error
 #
 # Primitive check to verify that the example code is valid
 #
@@ -14,15 +14,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "zoned_io_sync write $XNVME_URI"; then
-  test::fail
-fi
-
 if ! ssh::cmd "zoned_io_sync append $XNVME_URI"; then
-  test::fail
-fi
-
-if ! ssh::cmd "zoned_io_sync read $XNVME_URI"; then
   test::fail
 fi
 

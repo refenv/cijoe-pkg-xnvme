@@ -1,0 +1,35 @@
+descr: Verify base xNVMe functionality on Linux via NVMe device
+descr_long: |
+  Basic verification of xNVMe using through the different IO and control paths.
+hooks: ["sysinf"]
+evars:
+  CMD_PREFIX: " "
+  FIO_NRUNS: "1"
+  FIO_SECTION: "default"
+  FIO_SCRIPT: "xnvme-verify.fio"
+  FIO_IOENG_NAME: "xnvme"
+  HUGEMEM: "4096"
+  NVME_NSTYPE: "lblk"
+  DEV_TYPE: "nvme"
+
+
+
+
+testsuites:
+  - name: xnvme_base
+    alias: "xNVMe: verify base functionality using be:linux/nvme/thr"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    hooks: [ "xnvme" ]
+  - name: xnvme_base
+    alias: "xNVMe: verify base functionality using be:linux/nvme/aio"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
+    hooks: [ "xnvme" ]
+  - name: xnvme_base
+    alias: "xNVMe: verify base functionality using be:linux/nvme/iou"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
+    hooks: [ "xnvme" ]
+
+  - name: xnvme_base_no_multi
+    alias: "xNVMe: verify base functionality using be:spdk"
+    evars: { XNVME_BE: "spdk" }
+    hooks: [ "xnvme" ]

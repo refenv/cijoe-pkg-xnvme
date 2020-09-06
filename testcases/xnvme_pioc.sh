@@ -17,8 +17,12 @@ test::enter
 : "${NSID:=0x1}"
 : "${OPCODE:=0x02}"     # read-command on I/O queue
 
-ssh::cmd "xnvme info ${XNVME_URI} > /tmp/device-info.yml"
-ssh::pull "/tmp/device-info.yml" "/tmp/device-info.yml"
+if ! ssh::cmd "xnvme info ${XNVME_URI} > /tmp/device-info.yml"; then
+  test::fail
+fi
+if ! ssh::pull "/tmp/device-info.yml" "/tmp/device-info.yml"; then
+  test::fail
+fi
 
 DATA_NBYTES=$(cat < /tmp/device-info.yml | awk '/lba_nbytes:/ {print $2}')
 
