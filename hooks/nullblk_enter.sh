@@ -13,10 +13,39 @@ test::require ssh
 test::enter
 
 hook::nullblk_enter() {
+  if ! nullblk::remove; then
+    cij::info "hook:nullblk_enter: FAILED nullblk::remove -- continuing"
+  fi
+
   if ! nullblk::insert; then
     cij::err "hook::nullblk_enter: FAILED: nullblk::insert"
     return 1
   fi
+
+  if [[ ! -v NULLBLK_AUTOCONF ]]; then
+    return 0;
+  fi
+
+  case $NULLBLK_AUTOCONF in
+  blk_zblk)
+    export NULLBLK_ZONED
+    export NULLBLK_GB
+
+    NULLBLK_ZONED="0"
+    NULLBLK_GB="2"
+    if ! nullblk::create; then
+      cij::err "hook::nullblk_enter: FAILED: nullblk:create"
+      return 1
+    fi
+
+    NULLBLK_ZONED="1"
+    NULLBLK_GB="2"
+    if ! nullblk::create; then
+      cij::err "hook::nullblk_enter: FAILED: nullblk:create"
+      return 1
+    fi
+    ;;
+  esac
 
   return 0
 }
