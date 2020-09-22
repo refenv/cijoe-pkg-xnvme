@@ -30,10 +30,12 @@ hook::nullblk_enter() {
   blk_zblk)
     export NULLBLK_ZONED
     NULLBLK_ZONED=0
+    NULLBLK_GB=2
     if nullblk::create; then
       return 1
     fi
     NULLBLK_ZONED=1
+    NULLBLK_GB=2
     if nullblk::create; then
       return 1
     fi
