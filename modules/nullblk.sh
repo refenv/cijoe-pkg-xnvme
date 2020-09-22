@@ -91,11 +91,9 @@ nullblk::create() {
   local _id=0
   local _limit=0
   local _cfg_path
-  local _dev_path
 
   while [[ _limit -lt 10 ]]; do
     _cfg_path="${_kpath}/nullb${_id}"
-    _dev_path="/dev/nullb${_id}"
 
     if ssh::cmd "mkdir ${_cfg_path}"; then
       break
@@ -140,7 +138,7 @@ nullblk::create() {
   if ! ssh::cmd "echo '${NULLBLK_ZONED}' >> ${_cfg_path}/zoned"; then
     return 1
   fi
-  if [[ -v NULLBLK_ZONED && NULLBLK_ZONED == "1" ]]; then
+  if [[ -v NULLBLK_ZONED && "${NULLBLK_ZONED}" == "1" ]]; then
     if ! ssh::cmd "echo '${NULLBLK_ZONE_SIZE}' >> ${_cfg_path}/zone_size"; then
       return 1
     fi
