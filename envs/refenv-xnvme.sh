@@ -21,7 +21,7 @@
 # NVME_NSID based on NVME_NSTYPE
 #
 if [[ -v NVME_NSTYPE ]]; then
-  : "${PCI_DEV_NAME=0000:01:00.0}"
+  : "${PCI_DEV_NAME=0000:03:00.0}"
   : "${NVME_CNTID=0}"
 
   case $NVME_NSTYPE in
