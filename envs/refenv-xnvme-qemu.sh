@@ -99,7 +99,7 @@ if [[ -v XNVME_BE ]]; then
     exit 1
   esac
 
-  if [[ XNVME_BE == "linux" && -v XNVME_ASYNC ]]; then
+  if [[ -v XNVME_ASYNC && "${XNVME_BE}" == "linux" ]]; then
     case $XNVME_ASYNC in
     aio|iou|nil)
       XNVME_URI="${XNVME_URI}?async=${XNVME_ASYNC}"
