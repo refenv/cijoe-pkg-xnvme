@@ -19,30 +19,33 @@ hook::xnvme_enter() {
     return 1
   fi
 
-  if [[ ! -v XNVME_BE || -z "$XNVME_BE" ]]; then
+  if [[ ! -v XNVME_BE || -z "${XNVME_BE}" ]]; then
     cij::err "hook::xnvme_enter: XNVME_BE is not set or is the empty string"
     return 1
   fi
 
-  cij::info "hook:xnvme_enter: XNVME_BE($XNVME_BE)"
-
-  if [[ "$XNVME_BE" != "SPDK" ]]; then
-    cij::info "hook::xnvme_enter: not using SPDK driver -> nothing to do"
-    return 0
-  fi
+  cij::info "hook:xnvme_enter: XNVME_BE(${XNVME_BE})"
 
   XNVME_DRIVER_CMD="xnvme-driver"
-  if [[ -v HUGEMEM && -n "$HUGEMEM" ]]; then
-    XNVME_DRIVER_CMD="HUGEMEM=$HUGEMEM $XNVME_DRIVER_CMD"
-  fi
-  if [[ -v NRHUGE && -n "$NRHUGE" ]]; then
-    XNVME_DRIVER_CMD="NRHUGE=$NRHUGE $XNVME_DRIVER_CMD"
-  fi
-  if [[ -v HUGENODE && -n "$HUGENODE" ]]; then
-    XNVME_DRIVER_CMD="HUGENODE=$HUGENODE $XNVME_DRIVER_CMD"
-  fi
 
-  if ! ssh::cmd "$XNVME_DRIVER_CMD"; then
+  case $XNVME_BE in
+  spdk|SPDK)
+    if [[ -v HUGEMEM && -n "${HUGEMEM}" ]]; then
+      XNVME_DRIVER_CMD="HUGEMEM=${HUGEMEM} ${XNVME_DRIVER_CMD}"
+    fi
+    if [[ -v NRHUGE && -n "${NRHUGE}" ]]; then
+      XNVME_DRIVER_CMD="NRHUGE=${NRHUGE} ${XNVME_DRIVER_CMD}"
+    fi
+    if [[ -v HUGENODE && -n "${HUGENODE}" ]]; then
+      XNVME_DRIVER_CMD="HUGENODE=${HUGENODE} ${XNVME_DRIVER_CMD}"
+    fi
+    ;;
+
+  *)
+    XNVME_DRIVER_CMD="${XNVME_DRIVER_CMD} reset"
+  esac
+
+  if ! ssh::cmd "${XNVME_DRIVER_CMD}"; then
     cij::err "hook::xnvme_enter: FAILED: detaching NVMe driver"
     return 1
   fi
