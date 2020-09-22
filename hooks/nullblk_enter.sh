@@ -29,6 +29,7 @@ hook::nullblk_enter() {
   case $NULLBLK_AUTOCONF in
   blk_zblk)
     export NULLBLK_ZONED
+    export NULLBLK_GB
     NULLBLK_ZONED=0
     NULLBLK_GB=2
     if nullblk::create; then
