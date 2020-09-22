@@ -5,6 +5,7 @@ descr_long: |
   instances as well as NVMe devices. See 'envs/refenv-xnvme.sh' for an example
   of defining an environment for this testplan.
 hooks: ["sysinf"]
+evars:
   NULLBLK_ZONED: "0"
   NULLBLK_GB: "14"
   NULLBLK_NR_DEVICES: "0"
