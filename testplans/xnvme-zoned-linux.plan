@@ -39,5 +39,5 @@ testsuites:
 
   - name: xnvme_zoned
     alias: "xNVMe:zoned/be:spdk: verify zoned functionality using be:spdk"
-    evars: { DEV_TYPE: "nvme", XNVME_BE: "SPDK", HUGEMEM: "4096" }
+    evars: { DEV_TYPE: "nvme", XNVME_BE: "spdk" }
     hooks: [ "xnvme" ]
