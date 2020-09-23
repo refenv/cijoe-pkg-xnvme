@@ -86,13 +86,13 @@ nullblk::create() {
     return 1
   fi
 
-  local _cmd="echo 'Creating nullblk instance'"
   local _kpath="/sys/kernel/config/nullb"
   local _devname=""
   local _size
   local _id=0
   local _limit=0
   local _cfg_path
+  local _cmd
 
   while [[ _limit -lt 10 ]]; do
     _devname="nullb${_id}"
@@ -105,6 +105,13 @@ nullblk::create() {
     _limit=$(( _limit + 1 ))
     _id=$(( _id + 1 ))
   done
+
+  if [[ _limit -eq 10 ]]; then
+    cij::err "failed"
+    return 1
+  fi
+
+  _cmd="echo 'Creating nullblk instance: ${_devname}'"
 
   _size=$(( NULLBLK_GB * 1024 ))
   _cmd="${_cmd} && echo '${_size}' >> ${_cfg_path}/size"
@@ -125,14 +132,14 @@ nullblk::create() {
   _cmd="${_cmd} && echo '${NULLBLK_MEMORY_BACKED}' >> ${_cfg_path}/memory_backed"
   _cmd="${_cmd} && echo '${NULLBLK_ZONED}' >> ${_cfg_path}/zoned"
 
-  _cmd="${_cmd} echo '1' >> ${_cfg_path}/power"
+  _cmd="${_cmd} && echo '1' >> ${_cfg_path}/power"
 
   if ! ssh::cmd "${_cmd}"; then
     cij::err "nullblk:::create: failed creating nullblk instance: '${_devname}'"
     return 1
   fi
 
-  cij::err "nullblk:::create: created nullblk instance: '${_devname}'"
+  cij::info "nullblk:::create: created nullblk instance: '${_devname}'"
 
   return 0
 }
