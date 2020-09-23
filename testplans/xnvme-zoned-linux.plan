@@ -4,14 +4,13 @@ descr_long: |
   Also utilizing different devices, that is memory-backed Linux Null Block
   instances as well as NVMe devices. See 'envs/refenv-xnvme.sh' for an example
   of defining an environment for this testplan.
+hooks: ["sysinf"]
 evars:
   CMD_PREFIX: " "
   FIO_NRUNS: "1"
   FIO_SECTION: "verify"
   FIO_SCRIPT: "xnvme-zoned.fio"
   FIO_IOENG_NAME: "xnvme"
-hooks: ["sysinf"]
-evars:
   NULLBLK_ZONED: "1"
   NULLBLK_GB: "14"
   NULLBLK_NR_DEVICES: "0"
