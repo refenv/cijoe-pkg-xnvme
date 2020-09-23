@@ -86,14 +86,17 @@ nullblk::create() {
     return 1
   fi
 
+  local _cmd="echo 'Creating nullblk instance'"
   local _kpath="/sys/kernel/config/nullb"
+  local _devname=""
   local _size
   local _id=0
   local _limit=0
   local _cfg_path
 
   while [[ _limit -lt 10 ]]; do
-    _cfg_path="${_kpath}/nullb${_id}"
+    _devname="nullb${_id}"
+    _cfg_path="${_kpath}/${_devname}"
 
     if ssh::cmd "mkdir ${_cfg_path}"; then
       break
@@ -103,53 +106,33 @@ nullblk::create() {
     _id=$(( _id + 1 ))
   done
 
-  if ! ssh::cmd "echo '${NULLBLK_HW_QUEUE_DEPTH}' >> ${_cfg_path}/hw_queue_depth"; then
-    return 1
-  fi
-  if ! ssh::cmd "echo '${NULLBLK_HOME_NODE}' >> ${_cfg_path}/home_node"; then
-    return 1
-  fi
-  if ! ssh::cmd "echo '${NULLBLK_QUEUE_MODE}' >> ${_cfg_path}/queue_mode"; then
-    return 1
-  fi
-  if ! ssh::cmd "echo '${NULLBLK_BS}' >> ${_cfg_path}/blocksize"; then
-    return 1
-  fi
-
   _size=$(( NULLBLK_GB * 1024 ))
-  if ! ssh::cmd "echo '${_size}' >> ${_cfg_path}/size"; then
-    return 1
-  fi
+  _cmd="${_cmd} && echo '${_size}' >> ${_cfg_path}/size"
 
-  if ! ssh::cmd "echo '${NULLBLK_COMPLETION_NSEC}' >> ${_cfg_path}/completion_nsec"; then
-    return 1
-  fi
-  if ! ssh::cmd "echo '${NULLBLK_IRQMODE}' >> ${_cfg_path}/irqmode"; then
-    return 1
-  fi
-  if ! ssh::cmd "echo '${NULLBLK_BLOCKING}' >> ${_cfg_path}/blocking"; then
-    return 1
-  fi
-
-  if ! ssh::cmd "echo '${NULLBLK_MEMORY_BACKED}' >> ${_cfg_path}/memory_backed"; then
-    return 1
-  fi
-
-  if ! ssh::cmd "echo '${NULLBLK_ZONED}' >> ${_cfg_path}/zoned"; then
-    return 1
-  fi
   if [[ -v NULLBLK_ZONED && "${NULLBLK_ZONED}" == "1" ]]; then
-    if ! ssh::cmd "echo '${NULLBLK_ZONE_SIZE}' >> ${_cfg_path}/zone_size"; then
-      return 1
-    fi
-    if ! ssh::cmd "echo '${NULLBLK_ZONE_NR_CONV}' >> ${_cfg_path}/zone_nr_conv"; then
-      return 1
-    fi
+    _cmd="${_cmd} && echo '${NULLBLK_ZONE_SIZE}' >> ${_cfg_path}/zone_size"
+    _cmd="${_cmd} && echo '${NULLBLK_ZONE_NR_CONV}' >> ${_cfg_path}/zone_nr_conv"
   fi
 
-  if ssh::cmd "echo '1' >> ${_cfg_path}/power"; then
+  _cmd="${_cmd} && echo '${NULLBLK_HW_QUEUE_DEPTH}' >> ${_cfg_path}/hw_queue_depth"
+  _cmd="${_cmd} && echo '${NULLBLK_HW_QUEUE_DEPTH}' >> ${_cfg_path}/hw_queue_depth"
+  _cmd="${_cmd} && echo '${NULLBLK_HOME_NODE}' >> ${_cfg_path}/home_node"
+  _cmd="${_cmd} && echo '${NULLBLK_QUEUE_MODE}' >> ${_cfg_path}/queue_mode"
+  _cmd="${_cmd} && echo '${NULLBLK_BS}' >> ${_cfg_path}/blocksize"
+  _cmd="${_cmd} && echo '${NULLBLK_COMPLETION_NSEC}' >> ${_cfg_path}/completion_nsec"
+  _cmd="${_cmd} && echo '${NULLBLK_IRQMODE}' >> ${_cfg_path}/irqmode"
+  _cmd="${_cmd} && echo '${NULLBLK_BLOCKING}' >> ${_cfg_path}/blocking"
+  _cmd="${_cmd} && echo '${NULLBLK_MEMORY_BACKED}' >> ${_cfg_path}/memory_backed"
+  _cmd="${_cmd} && echo '${NULLBLK_ZONED}' >> ${_cfg_path}/zoned"
+
+  _cmd="${_cmd} echo '1' >> ${_cfg_path}/power"
+
+  if ! ssh::cmd "${_cmd}"; then
+    cij::err "nullblk:::create: failed creating nullblk instance: '${_devname}'"
     return 1
   fi
+
+  cij::err "nullblk:::create: created nullblk instance: '${_devname}'"
 
   return 0
 }
