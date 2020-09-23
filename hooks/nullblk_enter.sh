@@ -30,14 +30,18 @@ hook::nullblk_enter() {
   blk_zblk)
     export NULLBLK_ZONED
     export NULLBLK_GB
-    NULLBLK_ZONED=0
-    NULLBLK_GB=2
-    if nullblk::create; then
+
+    NULLBLK_ZONED="0"
+    NULLBLK_GB="2"
+    if ! nullblk::create; then
+      cij::err "hook::nullblk_enter: FAILED: nullblk:create"
       return 1
     fi
-    NULLBLK_ZONED=1
-    NULLBLK_GB=2
-    if nullblk::create; then
+
+    NULLBLK_ZONED="1"
+    NULLBLK_GB="2"
+    if ! nullblk::create; then
+      cij::err "hook::nullblk_enter: FAILED: nullblk:create"
       return 1
     fi
     ;;
