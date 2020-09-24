@@ -18,11 +18,10 @@ export CIJ_TEST_NAME
 source "$CIJ_ROOT/modules/cijoe.sh"
 test::enter
 
-: "${FIO_IOENG_NAME:?Must be set and non-empty}"
-
 : "${FIO_NRUNS:=1}"
 : "${FIO_SCRIPT:?Must be set and non-empty}"
 : "${FIO_SECTION:?Must be set and non-empty}"
+: "${FIO_IOENG_NAME:?Must be set and non-empty}"
 
 for i in $(seq "$FIO_NRUNS"); do
   cij::info "run: ${i}/${FIO_NRUNS}"
