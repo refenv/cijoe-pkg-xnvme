@@ -57,7 +57,7 @@ xnvme::fioe() {
   local _cmd
 
   if ! ssh::cmd "[[ -f \"${jobfile}\" ]]"; then
-    cij::err "xnvme:fio_compare: '${jobfile}' does not exist!"
+    cij::err "xnvme:fioe: '${jobfile}' does not exist!"
     return 1
   fi
 
@@ -68,23 +68,16 @@ xnvme::fioe() {
   if [[ "$ioengine_name" == *"xnvme"* ]]; then
     : "${XNVME_URI:?Must be set and non-empty}"
 
-    local fioe_so="${XNVME_LIB_ROOT}/libxnvme-fio-engine.so"
-    local fioe_uri
-    local fioe_uri_opts
+    local _fioe_so="${XNVME_LIB_ROOT}/libxnvme-fio-engine.so"
+    local _fioe_uri=${XNVME_URI//:/\\\\:}
 
-    if ! ssh::cmd "[[ -f \"${fioe_so}\" ]]"; then
-      cij::err "xnvme:fio_compare: '${fioe_so}' does not exist!"
+    if ! ssh::cmd "[[ -f \"${_fioe_so}\" ]]"; then
+      cij::err "xnvme:fioe: '${_fioe_so}' does not exist!"
       return 1
     fi
 
-    fioe_uri=${XNVME_URI//:/\\\\:}
-    fioe_uri_opts=""
-    if [[ "$XNVME_URI" == *"/dev/nullb"* ]]; then
-      fioe_uri_opts="${fioe_uri_opts}?pseudo=1"
-    fi
-
-    _cmd="${_cmd} --ioengine=external:${fioe_so}"
-    _cmd="${_cmd} --filename=${fioe_uri}${fioe_uri_opts}"
+    _cmd="${_cmd} --ioengine=external:${_fioe_so}"
+    _cmd="${_cmd} --filename=${_fioe_uri}"
 
   # Add the special-sauce for the external SPDK io-engine spdk_nvme
   elif [[ "$ioengine_name" == "spdk_nvme" ]]; then
