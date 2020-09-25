@@ -8,7 +8,7 @@ hooks: ["sysinf"]
 evars:
   CMD_PREFIX: " "
   FIO_NRUNS: "1"
-  FIO_SECTION: "verify"
+  FIO_SECTION: "default"
   FIO_SCRIPT: "xnvme-verify.fio"
   FIO_IOENG_NAME: "xnvme"
   NULLBLK_ZONED: "0"
