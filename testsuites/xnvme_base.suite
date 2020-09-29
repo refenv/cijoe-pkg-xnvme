@@ -21,4 +21,4 @@ xnvme_tests_async_intf03.sh
 xnvme_tests_async_intf04.sh
 examples-xnvme_io_async_write.sh
 examples-xnvme_io_async_read.sh
-xnvme_fio_101.sh
+xnvme_fioe.sh
