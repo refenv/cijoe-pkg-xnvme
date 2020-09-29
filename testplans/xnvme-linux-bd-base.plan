@@ -1,4 +1,4 @@
-descr: Basic verification of xNVMe using a non-NVMe Linux Block Device
+descr: Verification of basic xNVMe functionality on Linux via Null Block
 descr_long: |
   Basic verification of xNVMe using through the different IO and control paths.
 hooks: ["sysinf"]

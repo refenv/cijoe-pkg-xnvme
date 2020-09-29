@@ -16,15 +16,15 @@ evars:
   NULLBLK_NR_DEVICES: "0"
   NULLBLK_AUTOCONF: "blk_zblk"
 testsuites:
-  - name: xnvme_lblk
-    alias: "xNVMe: verify lblk functionality using be:linux/block/thr"
+  - name: xnvme_ncs_mandatory
+    alias: "xNVMe: verify base functionality using be:linux/block/thr"
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
     hooks: [ "xnvme", "nullblk" ]
-  - name: xnvme_lblk_wo_scc
-    alias: "xNVMe: verify lblk functionality using be:linux/block/aio"
+  - name: xnvme_ncs_mandatory
+    alias: "xNVMe: verify base functionality using be:linux/block/aio"
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
     hooks: [ "xnvme", "nullblk" ]
-  - name: xnvme_lblk_wo_scc
-    alias: "xNVMe: verify lblk functionality using be:linux/block/iou"
+  - name: xnvme_ncs_mandatory
+    alias: "xNVMe: verify base functionality using be:linux/block/iou"
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
     hooks: [ "xnvme", "nullblk" ]

@@ -1,9 +1,6 @@
-descr: Basic verification of xNVMe optional commands on Linux using NVMe device
+descr: Basic verification of xNVMe/NVM Cmd.Set. on Linux using an NVMe device
 descr_long: |
   Basic Verification of xNVMe using through the different IO and control paths.
-  Also utilizing different devices, that is memory-backed Linux Null Block
-  instances as well as NVMe devices. See 'envs/refenv-xnvme.sh' for an example
-  of defining an environment for this testplan.
 hooks: ["sysinf"]
 evars:
   CMD_PREFIX: " "
@@ -15,20 +12,20 @@ evars:
   NVME_NSTYPE: "lblk"
   DEV_TYPE: "nvme"
 testsuites:
-  - name: xnvme_lblk
-    alias: "xNVMe: verify lblk functionality using be:linux/nvme/thr"
+  - name: xnvme_ncs_mandatory
+    alias: "xNVMe: verify base functionality using be:linux/nvme/thr"
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
     hooks: [ "xnvme" ]
-  - name: xnvme_lblk_wo_scc
-    alias: "xNVMe: verify lblk functionality using be:linux/nvme/aio"
+  - name: xnvme_ncs_mandatory
+    alias: "xNVMe: verify base functionality using be:linux/nvme/aio"
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
     hooks: [ "xnvme" ]
-  - name: xnvme_lblk_wo_scc
-    alias: "xNVMe: verify lblk functionality using be:linux/nvme/iou"
+  - name: xnvme_ncs_mandatory
+    alias: "xNVMe: verify base functionality using be:linux/nvme/iou"
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
     hooks: [ "xnvme" ]
 
-  - name: xnvme_lblk
-    alias: "xNVMe: verify lblk functionality using be:spdk"
+  - name: xnvme_ncs_mandatory
+    alias: "xNVMe: verify base functionality using be:spdk"
     evars: { XNVME_BE: "spdk" }
     hooks: [ "xnvme" ]

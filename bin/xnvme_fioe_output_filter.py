@@ -9,7 +9,7 @@ import sys
 import os
 try:
     from pathlib import Path
-except:
+except ImportError:
     sys.exit(0)
 
 def extract(root, expr, func):
