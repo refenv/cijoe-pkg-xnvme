@@ -16,15 +16,15 @@ evars:
   NULLBLK_NR_DEVICES: "0"
   NULLBLK_AUTOCONF: "blk_zblk"
 testsuites:
-  - name: xnvme_zoned
+  - name: xnvme_zcs_mandatory
     alias: "xNVMe: verify zoned functionality using be:linux/block/thr"
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr", }
     hooks: [ "xnvme", "nullblk" ]
-  - name: xnvme_zoned_wo_append
+  - name: xnvme_zcs_mandatory
     alias: "xNVMe: verify zoned functionality using be:linux/block/aio"
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
     hooks: [ "xnvme", "nullblk" ]
-  - name: xnvme_zoned_wo_append
+  - name: xnvme_zcs_mandatory
     alias: "xNVMe: verify zoned functionality using be:linux/block/iou"
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
     hooks: [ "xnvme", "nullblk" ]
