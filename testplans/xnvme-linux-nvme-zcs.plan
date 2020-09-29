@@ -1,4 +1,4 @@
-descr: Basic verification of xNVMe Zoned Command Set on Linux using NVMe device
+descr: Verify xNVMe Zoned Command Set using an NVMe device
 descr_long: |
   Basic verification of xNVMe using through the different IO and control paths.
 hooks: ["sysinf"]
@@ -11,6 +11,10 @@ evars:
   HUGEMEM: "4096"
   NVME_NSTYPE: "zoned"
   DEV_TYPE: "nvme"
+
+
+
+
 testsuites:
   - name: xnvme_zcs_mandatory
     alias: "xNVMe: verify zoned functionality using be:linux/nvme/thr"

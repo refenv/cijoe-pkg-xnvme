@@ -1,4 +1,4 @@
-descr: Verification of basic xNVMe functionality on Linux via Null Block
+descr: Verify base xNVMe functionality on Linux via Null Block
 descr_long: |
   Basic verification of xNVMe using through the different IO and control paths.
 hooks: ["sysinf"]
@@ -18,7 +18,7 @@ evars:
 testsuites:
   - name: xnvme_base
     alias: "xNVMe: verify base functionality using be:linux/block/thr"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
     hooks: [ "xnvme", "nullblk" ]
   - name: xnvme_base
     alias: "xNVMe: verify base functionality using be:linux/block/aio"

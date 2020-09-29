@@ -1,6 +1,6 @@
-descr: Basic verification of xNVMe using a non-NVMe Linux Block Device
+descr: Verify xNVMe mandatory NVM Command-set using a Null-block device
 descr_long: |
-  Basic verification of xNVMe using through the different IO and control paths.
+  Verify xNVMe mandatory NVM Command-set using a Null-block device
 hooks: ["sysinf"]
 evars:
   CMD_PREFIX: " "
