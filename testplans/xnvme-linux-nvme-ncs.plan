@@ -1,4 +1,4 @@
-descr: Basic verification of xNVMe optional commands on Linux
+descr: Basic verification of xNVMe optional commands on Linux using NVMe device
 descr_long: |
   Basic Verification of xNVMe using through the different IO and control paths.
   Also utilizing different devices, that is memory-backed Linux Null Block
@@ -11,32 +11,24 @@ evars:
   FIO_SECTION: "default"
   FIO_SCRIPT: "xnvme-verify.fio"
   FIO_IOENG_NAME: "xnvme"
-  NULLBLK_ZONED: "0"
-  NULLBLK_GB: "14"
-  NULLBLK_NR_DEVICES: "0"
-  NULLBLK_AUTOCONF: "blk_zblk"
   HUGEMEM: "4096"
   NVME_NSTYPE: "lblk"
+  DEV_TYPE: "nvme"
 testsuites:
-  - name: xnvme_lblk_wo_scc
-    alias: "xNVMe: verify lblk functionality using be:linux/block/aio"
-    evars: { DEV_TYPE: "nullblk", XNVME_BE: "linux", XNVME_ASYNC: "aio" }
-    hooks: [ "xnvme", "nullblk" ]
-  - name: xnvme_lblk_wo_scc
-    alias: "xNVMe: verify lblk functionality using be:linux/block/iou"
-    evars: { DEV_TYPE: "nullblk", XNVME_BE: "linux", XNVME_ASYNC: "iou" }
-    hooks: [ "xnvme", "nullblk" ]
-
+  - name: xnvme_lblk
+    alias: "xNVMe: verify lblk functionality using be:linux/nvme/thr"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    hooks: [ "xnvme" ]
   - name: xnvme_lblk_wo_scc
     alias: "xNVMe: verify lblk functionality using be:linux/nvme/aio"
-    evars: { DEV_TYPE: "nvme", XNVME_BE: "linux", XNVME_ASYNC: "aio" }
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
     hooks: [ "xnvme" ]
   - name: xnvme_lblk_wo_scc
     alias: "xNVMe: verify lblk functionality using be:linux/nvme/iou"
-    evars: { DEV_TYPE: "nvme", XNVME_BE: "linux", XNVME_ASYNC: "iou" }
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
     hooks: [ "xnvme" ]
 
   - name: xnvme_lblk
     alias: "xNVMe: verify lblk functionality using be:spdk"
-    evars: { DEV_TYPE: "nvme", XNVME_BE: "spdk" }
+    evars: { XNVME_BE: "spdk" }
     hooks: [ "xnvme" ]

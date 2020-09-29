@@ -3,11 +3,14 @@
     This script extracts the features of interest from the fio-output produced
     by running the CIJOE "xnvme_fioe.sh" testcase.
 """
-from pathlib import Path
 import argparse
 import json
 import sys
 import os
+try:
+    from pathlib import Path
+except:
+    sys.exit(0)
 
 def extract(root, expr, func):
     """
