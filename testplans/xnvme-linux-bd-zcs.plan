@@ -18,7 +18,7 @@ evars:
 testsuites:
   - name: xnvme_zcs_mandatory
     alias: "xNVMe: verify zoned functionality using be:linux/block/thr"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr", }
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
     hooks: [ "xnvme", "nullblk" ]
 
   - name: xnvme_zcs_mandatory

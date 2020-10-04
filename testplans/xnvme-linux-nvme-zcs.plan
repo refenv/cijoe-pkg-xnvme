@@ -22,17 +22,17 @@ testsuites:
     hooks: [ "xnvme" ]
   - name: xnvme_zcs_optional
     alias: "xNVMe: verify zoned functionality using be:linux/nvme/thr"
-    evars: { DEV_TYPE: "nvme", XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
     hooks: [ "xnvme" ]
 
   - name: xnvme_zcs_mandatory
     alias: "xNVMe: verify zoned functionality using be:linux/nvme/aio"
-    evars: { DEV_TYPE: "nvme", XNVME_BE: "linux", XNVME_ASYNC: "aio" }
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
     hooks: [ "xnvme" ]
 
   - name: xnvme_zcs_mandatory
     alias: "xNVMe: verify zoned functionality using be:linux/nvme/iou"
-    evars: { DEV_TYPE: "nvme", XNVME_BE: "linux", XNVME_ASYNC: "iou" }
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
     hooks: [ "xnvme" ]
 
   - name: xnvme_zcs_mandatory
