@@ -10,11 +10,15 @@
 : "${QEMU_GUESTS:=/opt/guests}"; export QEMU_GUESTS
 : "${QEMU_GUEST_NAME:=emujoe}"; export QEMU_GUEST_NAME
 : "${QEMU_GUEST_SSH_FWD_PORT:=2222}"; export QEMU_GUEST_SSH_FWD_PORT
-: "${QEMU_GUEST_CONSOLE:=file}"; export QEMU_GUEST_CONSOLE
+#: "${QEMU_GUEST_CONSOLE:=file}"; export QEMU_GUEST_CONSOLE
+#: "${QEMU_GUEST_CONSOLE:=stdio}"; export QEMU_GUEST_CONSOLE
+: "${QEMU_GUEST_CONSOLE:=sock}"; export QEMU_GUEST_CONSOLE
+: "${QEMU_GUEST_HOST_SHARE:=$HOME/git}"; export QEMU_GUEST_CONSOLE
 : "${QEMU_GUEST_MEM:=6G}"; export QEMU_GUEST_MEM
 : "${QEMU_GUEST_SMP:=4}"; export QEMU_GUEST_SMP
+: "${QEMU_GUEST_KERNEL:=0}"; export QEMU_GUEST_KERNEL
 #: "${QEMU_GUEST_KERNEL:=1}"; export QEMU_GUEST_KERNEL
-#: "${QEMU_GUEST_APPEND:=net.ifnames=0 biosdevname=0}"; export QEMU_GUEST_APPEND
+#: "${QEMU_GUEST_APPEND:=net.ifnames=0 biosdevname=0 intel_iommu=on vfio_iommu_type1.allow_unsafe_interrupts=1}"; export QEMU_GUEST_APPEND
 
 # CIJOE: SSH_* environment variables
 : "${SSH_HOST:=localhost}"; export SSH_HOST
