@@ -17,10 +17,10 @@ test::enter
 : "${NSID:=0x1}"
 : "${OPCODE:=0x02}"     # read-command on I/O queue
 
-if ssh::cmd "xnvme info ${XNVME_URI} > /tmp/device-info.yml"; then
+if ! ssh::cmd "xnvme info ${XNVME_URI} > /tmp/device-info.yml"; then
   test::fail
 fi
-if ssh::pull "/tmp/device-info.yml" "/tmp/device-info.yml"; then
+if ! ssh::pull "/tmp/device-info.yml" "/tmp/device-info.yml"; then
   test::fail
 fi
 
