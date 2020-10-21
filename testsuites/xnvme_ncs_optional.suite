@@ -1,5 +1,6 @@
 xnvme_tests_lblk_scopy.sh
 xnvme_tests_lblk_zero.sh
+xnvme_tests_lblk_write_uncorrectable.sh
 xnvme_tests_scc_idfy.sh
 xnvme_tests_scc_scopy_async.sh
 xnvme_tests_scc_scopy_msrc_async.sh
