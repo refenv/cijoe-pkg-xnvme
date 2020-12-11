@@ -62,6 +62,15 @@ xnvme::fioe() {
   fi
 
   _cmd="${CMD_PREFIX} ${FIO_BIN} ${jobfile}"
+  if [[ -v FIO_BS ]]; then
+    _cmd="FIO_BS=${FIO_BS} ${_cmd}"
+  fi
+  if [[ -v FIO_RW ]]; then
+    _cmd="FIO_RW=${FIO_RW} ${_cmd}"
+  fi
+  if [[ -v FIO_IODEPTH ]]; then
+    _cmd="FIO_IODEPTH=${FIO_IODEPTH} ${_cmd}"
+  fi
   _cmd="${_cmd} --section=${section}"
 
   # Add the special-sauce for the external xNVMe fio engine
