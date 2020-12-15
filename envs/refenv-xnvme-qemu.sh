@@ -31,13 +31,13 @@
 # xNVMe: the backend to utilize, this should be set in the testplan, but define
 # it here for running cijoe interactively
 #
-#: "${XNVME_ASYNC:=thr}"
-#: "${XNVME_ASYNC:=aio}"
-#: "${XNVME_ASYNC:=nil}"
-#: "${XNVME_ASYNC:=iou}"
-#: "${XNVME_BE:=linux}"
 #: "${XNVME_BE:=fbsd}"
 #: "${XNVME_BE:=spdk}"
+#: "${XNVME_BE:=linux}"
+#: "${XNVME_ASYNC:=nil}"
+#: "${XNVME_ASYNC:=thr}"
+#: "${XNVME_ASYNC:=libaio}"
+#: "${XNVME_ASYNC:=io_uring}"
 #
 
 # xNVMe: where are libraries and share stored on the target system? This is
@@ -90,7 +90,7 @@ fi
 #
 # xNVMe: define XNVME_URI and possibly HUGEMEM
 #
-if [[ -v XNVME_BE ]]; then
+if [[ -v XNVME_BE && -v NVME_DEV_PATH ]]; then
   : "${XNVME_DEV_PATH:=${NVME_DEV_PATH}}"
 
   case $XNVME_BE in
@@ -108,7 +108,7 @@ if [[ -v XNVME_BE ]]; then
 
   if [[ -v XNVME_ASYNC && "${XNVME_BE}" == "linux" ]]; then
     case $XNVME_ASYNC in
-    thr|iou|aio|nil)
+    thr|io_uring|libaio|nil)
       XNVME_URI="${XNVME_URI}?async=${XNVME_ASYNC}"
       ;;
     *)

@@ -21,10 +21,10 @@ testsuites:
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
     hooks: [ "xnvme", "nullblk" ]
   - name: xnvme_zcs_mandatory
-    alias: "xNVMe: verify mandatory Zoned functionality using be:linux/block/aio"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
+    alias: "xNVMe: verify mandatory Zoned functionality using be:linux/block/libaio"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "libaio" }
     hooks: [ "xnvme", "nullblk" ]
   - name: xnvme_zcs_mandatory
-    alias: "xNVMe: verify mandatory Zoned functionality using be:linux/block/iou"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
+    alias: "xNVMe: verify mandatory Zoned functionality using be:linux/block/io_uring"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "io_uring" }
     hooks: [ "xnvme", "nullblk" ]

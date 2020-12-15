@@ -61,9 +61,9 @@ def load(fpath, doc):
 
     for job in doc["jobs"]:
         yield (
-            "% 36s" % label_plan,
+            "% 16s" % label_plan,
             "qd: %02d" % int(job["job options"]["iodepth"]),
-            "% 36s" % label_suite,
+            "% 52s" % label_suite,
             "job: read",
             "bw_MB: % 5d" % (job["read"]["bw_bytes"] / (1000*1000)),
             "bw_MiB: % 5d" % (job["read"]["bw_bytes"] / (1024*1024)),
