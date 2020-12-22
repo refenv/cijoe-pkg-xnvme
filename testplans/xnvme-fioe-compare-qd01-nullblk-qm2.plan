@@ -23,13 +23,12 @@ evars:
 hooks: ["dmesg", "sysinf", "nullblk"]
 testsuites:
   # These are for the built-in fio engines: libaio, and io_uring
-  - name: REGLR_LAIO
-    alias: "Regular/laio"
-    evars: { FIO_IOENG_NAME: "libaio", XNVME_BE: "LAIO", FIO_AUX: "" }
+  - name: "reference:libaio"
+    evars: { FIO_IOENG_NAME: "libaio", XNVME_BE: "libaio", FIO_AUX: "" }
     testcases:
       - xnvme_fioe.sh
 
-  - name: REGLR_LIOU,SQT=0,IOP=0,RF=0,FB=0,NV=0
+  - name: "reference:io_uringREGLR_LIOU,SQT=0,IOP=0,RF=0,FB=0,NV=0
     alias: "Regular/liou"
     evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "LIOU", FIO_AUX: "--sqthread_poll=0 --hipri=0 --registerfiles=0 --fixedbufs=0 --nonvectored=0" }
     testcases:

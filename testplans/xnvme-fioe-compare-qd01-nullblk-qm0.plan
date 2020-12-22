@@ -28,33 +28,33 @@ testsuites:
     testcases:
       - xnvme_fioe.sh
 
-  - name: reference_IO_URING,SQT=0,IOP=0,RF=0,FB=0,NV=0
+  - name: "reference:io_uring,SQT=0,IOP=0,RF=0,FB=0,NV=0"
     evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "linux", FIO_AUX: "--sqthread_poll=0 --hipri=0 --registerfiles=0 --fixedbufs=0 --nonvectored=0" }
     testcases:
       - xnvme_fioe.sh
 
-  - name: reference_IO_URING,SQT=0,IOP=0,RF=1,FB=0,NV=0
+  - name: "reference:io_uring,SQT=0,IOP=0,RF=1,FB=0,NV=0"
     evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "linux", FIO_AUX: "--sqthread_poll=0 --hipri=0 --registerfiles=1 --fixedbufs=0 --nonvectored=0" }
     testcases:
       - xnvme_fioe.sh
 
-  - name: reference_IO_URING,SQT=0,IOP=0,RF=0,FB=1,NV=0
+  - name: "reference:io_uring,SQT=0,IOP=0,RF=0,FB=1,NV=0"
     evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "linux", FIO_AUX: "--sqthread_poll=0 --hipri=0 --registerfiles=0 --fixedbufs=1 --nonvectored=0" }
     testcases:
       - xnvme_fioe.sh
 
-  - name: reference_IO_URING,SQT=1,IOP=0,RF=1,FB=0,NV=0
+  - name: "reference:io_uring,SQT=1,IOP=0,RF=1,FB=0,NV=0"
     evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "linux", FIO_AUX: "--sqthread_poll=1 --hipri=0 --registerfiles=1 --fixedbufs=0 --nonvectored=0" }
     testcases:
       - xnvme_fioe.sh
 
   # io_uring comparable to xNVMe
-  - name: reference_IO_URING,SQT=1,IOP=0,RF=1,FB=0,NV=1
+  - name: "reference:io_uring,SQT=1,IOP=0,RF=1,FB=0,NV=1"
     evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "linux", FIO_AUX: "--sqthread_poll=1 --hipri=0 --registerfiles=1 --fixedbufs=0 --nonvectored=1" }
     testcases:
       - xnvme_fioe.sh
 
-  - name: reference_IO_URING,SQT=1,IOP=0,RF=1,FB=1,NV=0
+  - name: "reference:io_uring,SQT=1,IOP=0,RF=1,FB=1,NV=0"
     evars: { FIO_IOENG_NAME: "io_uring", XNVME_BE: "linux", FIO_AUX: "--sqthread_poll=1 --hipri=0 --registerfiles=1 --fixedbufs=1 --nonvectored=0" }
     testcases:
       - xnvme_fioe.sh
@@ -63,26 +63,26 @@ testsuites:
   # These use the external xNVMe fio io-engine libxnvme-fio-engine.so
   # With backends: libaio and io_uring
   #
-  - name: XNVME_NIL
-    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "linux", FIO_AUX: "" }
+  - name: "xnvme:nil"
+    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "linux", XNVME_ASYNC: "nil", FIO_AUX: "" }
     hooks: ["xnvme"]
     testcases:
       - xnvme_fioe.sh
 
-  - name: XNVME_LIBAIO
-    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "linux", FIO_AUX: "" }
+  - name: "xnvme:libaio"
+    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "linux", XNVME_ASYNC: "libaio", FIO_AUX: "" }
     hooks: ["xnvme"]
     testcases:
       - xnvme_fioe.sh
 
-  - name: XNVME_LIOU,SQT=0,IOP=0,RF=1,FB=0,NV=1
-    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "linux", FIO_AUX: "--sqthread_poll=0" }
+  - name: "xnvme:io_uring,SQT=0,IOP=0,RF=1,FB=0,NV=1"
+    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "linux", XNVME_ASYNC: "io_uring", FIO_AUX: "--sqthread_poll=0" }
     hooks: ["xnvme"]
     testcases:
       - xnvme_fioe.sh
 
-  - name: XNVME_LIOU,SQT=1,IOP=0,RF=1,FB=0,NV=1
-    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "linux", FIO_AUX: "--sqthread_poll=1" }
+  - name: "xnvme:io_uring,SQT=1,IOP=0,RF=1,FB=0,NV=1"
+    evars: { FIO_IOENG_NAME: "xnvme", XNVME_BE: "linux", XNVME_ASYNC: "io_uring", FIO_AUX: "--sqthread_poll=1" }
     hooks: ["xnvme"]
     testcases:
       - xnvme_fioe.sh
