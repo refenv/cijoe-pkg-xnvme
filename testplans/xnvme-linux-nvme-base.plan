@@ -21,12 +21,12 @@ testsuites:
     evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
     hooks: [ "xnvme" ]
   - name: xnvme_base
-    alias: "xNVMe: verify base functionality using be:linux/nvme/aio"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "aio" }
+    alias: "xNVMe: verify base functionality using be:linux/nvme/libaio"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "libaio" }
     hooks: [ "xnvme" ]
   - name: xnvme_base
-    alias: "xNVMe: verify base functionality using be:linux/nvme/iou"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "iou" }
+    alias: "xNVMe: verify base functionality using be:linux/nvme/io_uring"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "io_uring" }
     hooks: [ "xnvme" ]
 
   - name: xnvme_base_no_multi

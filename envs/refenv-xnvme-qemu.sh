@@ -32,9 +32,9 @@
 # it here for running cijoe interactively
 #
 #: "${XNVME_ASYNC:=thr}"
-#: "${XNVME_ASYNC:=aio}"
+#: "${XNVME_ASYNC:=libaio}"
 #: "${XNVME_ASYNC:=nil}"
-#: "${XNVME_ASYNC:=iou}"
+#: "${XNVME_ASYNC:=io_uring}"
 #: "${XNVME_BE:=linux}"
 #: "${XNVME_BE:=fbsd}"
 #: "${XNVME_BE:=spdk}"
@@ -108,7 +108,7 @@ if [[ -v XNVME_BE ]]; then
 
   if [[ -v XNVME_ASYNC && "${XNVME_BE}" == "linux" ]]; then
     case $XNVME_ASYNC in
-    thr|iou|aio|nil)
+    thr|io_uring|libaio|nil)
       XNVME_URI="${XNVME_URI}?async=${XNVME_ASYNC}"
       ;;
     *)
