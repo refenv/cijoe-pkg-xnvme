@@ -54,13 +54,25 @@ main() {
   fi
 
   # Start the runner
-  if ! cij_runner "$tplan_fpath" "$env_fpath" --output "$res_dpath" -vvv; then
+  if ! cij_runner --testplan "$tplan_fpath" --env "$env_fpath" --output "$res_dpath" -vvv; then
     cij::err "cij_runner encountered an error"
     res=$(( res + 1 ))
   fi
 
+  # Extract metrics
+  if ! cij_extractor --extractor fio_json_read --output "$res_dpath"; then
+    cij::err "cij_extractor encountered an error"
+    res=$(( res + 1 ))
+  fi
+
+  # Analyse metrics
+  if ! cij_analyser --preqs "${CIJ_TESTFILES}/example.preqs" --output "$res_dpath"; then
+    cij::err "cij_analyser encountered an error"
+    res=$(( res + 1 ))
+  fi
+
   # Create test report
-  if ! cij_reporter "$res_dpath"; then
+  if ! cij_reporter --output "$res_dpath"; then
     cij::err "cij_reporter encountered an error"
     res=$(( res + 1 ))
   fi
@@ -72,8 +84,10 @@ main() {
   fi
 
   if [[ $open_reports -gt 0 ]]; then
-    xdg-open "$res_dpath/testcases.html" &
-    xdg-open "$res_dpath/report.html" &
+    (xdg-open "$res_dpath/report.html" || open "$res_dpath/report.html") &
+  elif [[ $open_reports -gt 1 ]]; then
+    (xdg-open "$res_dpath/testcases.html" || open "$res_dpath/testcases.html") &
+    (xdg-open "$res_dpath/report.html" || open "$res_dpath/report.html") &
   fi
 
   cij::info "res: '$res'"

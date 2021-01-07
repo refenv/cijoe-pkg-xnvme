@@ -17,8 +17,8 @@ evars:
 
 testsuites:
   - name: xnvme_ncs_mandatory
-    alias: "xNVMe: verify mandatory NVM functionality using be:linux/nvme/thr"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    alias: "xNVMe: verify mandatory NVM functionality using be:linux/nvme/emu"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "emu" }
     hooks: [ "xnvme" ]
   - name: xnvme_ncs_mandatory
     alias: "xNVMe: verify mandatory NVM functionality using be:linux/nvme/libaio"
@@ -34,8 +34,8 @@ testsuites:
     hooks: [ "xnvme" ]
 
   - name: xnvme_ncs_optional
-    alias: "xNVMe: verify optional NVM functionality using be:linux/nvme/thr"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    alias: "xNVMe: verify optional NVM functionality using be:linux/nvme/emu"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "emu" }
     hooks: [ "xnvme" ]
   - name: xnvme_ncs_optional
     alias: "xNVMe: verify optional NVM functionality using be:spdk"

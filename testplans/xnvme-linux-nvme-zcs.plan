@@ -17,8 +17,8 @@ evars:
 
 testsuites:
   - name: xnvme_zcs_mandatory
-    alias: "xNVMe: verify mandatory Zoned functionality using be:linux/nvme/thr"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    alias: "xNVMe: verify mandatory Zoned functionality using be:linux/nvme/emu"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "emu" }
     hooks: [ "xnvme" ]
   - name: xnvme_zcs_mandatory
     alias: "xNVMe: verify mandatory Zoned functionality using be:linux/nvme/libaio"
@@ -34,8 +34,8 @@ testsuites:
     hooks: [ "xnvme" ]
 
   - name: xnvme_zcs_optional
-    alias: "xNVMe: verify optional Zoned functionality using be:linux/nvme/thr"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    alias: "xNVMe: verify optional Zoned functionality using be:linux/nvme/emu"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "emu" }
     hooks: [ "xnvme" ]
   - name: xnvme_zcs_optional
     alias: "xNVMe: verify mandatory Zoned functionality using be:spdk"
