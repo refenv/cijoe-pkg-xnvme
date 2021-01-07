@@ -17,8 +17,8 @@ evars:
   NULLBLK_AUTOCONF: "blk_zblk"
 testsuites:
   - name: xnvme_ncs_mandatory
-    alias: "xNVMe: verify mandatory NVM functionality using be:linux/block/thr"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    alias: "xNVMe: verify mandatory NVM functionality using be:linux/block/emu"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "emu" }
     hooks: [ "xnvme", "nullblk" ]
   - name: xnvme_ncs_mandatory
     alias: "xNVMe: verify mandatory NVM functionality using be:linux/block/libaio"

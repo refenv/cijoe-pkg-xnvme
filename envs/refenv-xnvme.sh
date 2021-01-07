@@ -1,98 +1,60 @@
 #!/usr/bin/env bash
 
-# xNVMe: the backend to utilize, this should be set in the testplan, but define
-# it here for running cijoe interactively
+# CIJOE: SSH_* environment variables; comment out to match target machine
+#: "${SSH_HOST=localhost}"; export SSH_HOST
+#: "${SSH_PORT:=22}"; export SSH_PORT
+#: "${SSH_USER:=root}"; export SSH_USER
+
 #
-#: "${XNVME_BE:=fbsd}"
-#: "${XNVME_BE:=spdk}"
-#: "${XNVME_BE:=linux}"
-#: "${XNVME_ASYNC:=nil}"
-#: "${XNVME_ASYNC:=thr}"
-#: "${XNVME_ASYNC:=libaio}"
-#: "${XNVME_ASYNC:=io_uring}"
+# PCIe and NVMe info; setup identifying the PCI device to use, the NVMe-
 #
+
+# Select other values based on 'NVME_NSTYPE' defined in testplan
+if [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "lblk" ]]; then
+  : "${PCI_DEV_NAME:=0000:01:00.0}"; export PCI_DEV_NAME
+  : "${NVME_CNTID:=0}"; export NVME_CNTID
+  : "${NVME_NSID:=1}"; export NVME_NSID
+elif [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "zoned" ]]; then
+  : "${PCI_DEV_NAME:=0000:01:00.0}"; export PCI_DEV_NAME
+  : "${NVME_CNTID:=0}"; export NVME_CNTID
+  : "${NVME_NSID:=2}"; export NVME_NSID
+elif [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "kvs" ]]; then
+  : "${PCI_DEV_NAME:=0000:01:00.0}"; export PCI_DEV_NAME
+  : "${NVME_CNTID:=0}"; export NVME_CNTID
+  : "${NVME_NSID:=3}"; export NVME_NSID
+else
+  : "${PCI_DEV_NAME:=0000:01:00.0}"; export PCI_DEV_NAME
+  : "${NVME_CNTID:=0}"; export NVME_CNTID
+  : "${NVME_NSID:=1}"; export NVME_NSID
+fi
+
+#
+# xNVMe: define XNVME_URI
+#
+if [[ -v XNVME_BE && "$XNVME_BE" == "spdk" ]]; then
+    : "${XNVME_URI:=pci:${PCI_DEV_NAME}?nsid=${NVME_NSID}}"; export XNVME_URI
+elif [[ -v XNVME_BE && "$XNVME_BE" == "linux" ]]; then
+    : "${XNVME_URI:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"; export XNVME_URI
+elif [[ -v XNVME_BE && "$XNVME_BE" == "fbsd" ]]; then
+    : "${XNVME_URI:=/dev/nvme${NVME_CNTID}ns${NVME_NSID}}"; export XNVME_URI
+fi
+
+# xNVMe: add mixins to XNVME_URI
+if [[ -v XNVME_URI && -v XNVME_ADMIN ]]; then
+  XNVME_URI="${XNVME_URI}?admin=${XNVME_ADMIN}"; export XNVME_URI
+fi
+if [[ -v XNVME_URI && -v XNVME_SYNC ]]; then
+  XNVME_URI="${XNVME_URI}?sync=${XNVME_SYNC}"; export XNVME_URI
+fi
+if [[ -v XNVME_URI && -v XNVME_ASYNC ]]; then
+  XNVME_URI="${XNVME_URI}?async=${XNVME_ASYNC}"; export XNVME_URI
+fi
 
 # xNVMe: where are libraries and share stored on the target system? This is
 # needed to find the xNVMe fio io-engine, fio scripts etc.
 #
 : "${XNVME_LIB_ROOT:=/usr/lib}"; export XNVME_LIB_ROOT
 : "${XNVME_SHARE_ROOT:=/usr/share/xnvme}"; export XNVME_SHARE_ROOT
-
-# xNVMe: which device is used for testing? set PCI_DEV_NAME, NVME_CNTID, and
-# NVME_NSID based on NVME_NSTYPE
-#
-if [[ -v NVME_NSTYPE ]]; then
-  : "${PCI_DEV_NAME=0000:03:00.0}"
-  : "${NVME_CNTID=0}"
-
-  case $NVME_NSTYPE in
-  lblk)
-    : "${NVME_NSID=1}"
-    ;;
-  zoned)
-    : "${NVME_NSID=2}"
-    ;;
-  *)
-    echo "# ERROR: invalid NVME_NSTYPE(${NVME_NSTYPE})"
-    exit 1
-    ;;
-  esac
-
-  if [[ -v DEV_TYPE && "${DEV_TYPE}" == "nullblk" ]]; then
-    case $NVME_NSTYPE in
-    lblk)
-      : "${NVME_DEV_NAME:=nullb0}"
-      ;;
-    zoned)
-      : "${NVME_DEV_NAME:=nullb1}"
-      ;;
-    esac
-  else
-    : "${NVME_DEV_NAME:=nvme${NVME_CNTID}n${NVME_NSID}}"
-  fi
-  : "${NVME_DEV_PATH:=/dev/${NVME_DEV_NAME}}"
-
-  export PCI_DEV_NAME
-  export NVME_NSID
-  export NVME_CNTID
-  export NVME_DEV_NAME
-  export NVME_DEV_PATH
-fi
-
-#
-# xNVMe: define XNVME_URI and possibly HUGEMEM
-#
-if [[ -v XNVME_BE ]]; then
-  : "${XNVME_DEV_PATH:=${NVME_DEV_PATH}}"
-
-  case $XNVME_BE in
-  linux|fbsd)
-    : "${XNVME_URI=${XNVME_DEV_PATH}}"
-    ;;
-  spdk)
-    : "${HUGEMEM:=4096}"
-    : "${XNVME_URI=pci:${PCI_DEV_NAME}?nsid=${NVME_NSID}}"
-    ;;
-  *)
-    echo "# ERROR: invalid XNVME_BE(${XNVME_BE})"
-    exit 1
-  esac
-
-  if [[ -v XNVME_ASYNC && "${XNVME_BE}" == "linux" ]]; then
-    case $XNVME_ASYNC in
-    thr|io_uring|libaio|nil)
-      XNVME_URI="${XNVME_URI}?async=${XNVME_ASYNC}"
-      ;;
-    *)
-      echo "# ERROR: invalid XNVME_ASYNC(${XNVME_ASYNC})"
-      exit 1
-    esac
-  fi
-
-  export HUGEMEM
-  export XNVME_DEV_PATH
-  export XNVME_URI
-fi
 
 # These are for running fio
 if [[ -v NVME_NSTYPE ]]; then
