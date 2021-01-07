@@ -17,8 +17,8 @@ evars:
 
 testsuites:
   - name: xnvme_core
-    alias: "xNVMe: verify core functionality using be:linux/nvme/thr"
-    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    alias: "xNVMe: verify core functionality using be:linux/nvme/emu"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "emu" }
     hooks: [ "xnvme" ]
   - name: xnvme_core
     alias: "xNVMe: verify core functionality using be:linux/nvme/libaio"
