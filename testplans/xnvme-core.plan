@@ -1,0 +1,35 @@
+descr: Verifies xNVMe core functionality on Linux via NVMe device
+descr_long: |
+  Verification of core functionality by retrieving xNVMe driver and device info using different IO backends and control paths.
+hooks: ["sysinf"]
+evars:
+  CMD_PREFIX: " "
+  FIO_NRUNS: "1"
+  FIO_SECTION: "default"
+  FIO_SCRIPT: "xnvme-verify.fio"
+  FIO_IOENG_NAME: "xnvme"
+  HUGEMEM: "4096"
+  NVME_NSTYPE: "lblk"
+  DEV_TYPE: "nvme"
+
+
+
+
+testsuites:
+  - name: xnvme_core
+    alias: "xNVMe: verify core functionality using be:linux/nvme/thr"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "thr" }
+    hooks: [ "xnvme" ]
+  - name: xnvme_core
+    alias: "xNVMe: verify core functionality using be:linux/nvme/libaio"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "libaio" }
+    hooks: [ "xnvme" ]
+  - name: xnvme_core
+    alias: "xNVMe: verify core functionality using be:linux/nvme/io_uring"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "io_uring" }
+    hooks: [ "xnvme" ]
+
+  - name: xnvme_core
+    alias: "xNVMe: verify core functionality using be:spdk"
+    evars: { XNVME_BE: "spdk" }
+    hooks: [ "xnvme" ]
