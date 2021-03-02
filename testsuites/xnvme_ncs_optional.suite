@@ -8,3 +8,4 @@ xnvme_tests_scc_scopy_msrc_sync.sh
 xnvme_tests_scc_scopy_sync.sh
 xnvme_tests_scc_support.sh
 lblk_write_zeroes.sh
+lblk_write_uncor.sh
