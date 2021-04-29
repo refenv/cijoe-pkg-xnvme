@@ -17,7 +17,7 @@ qemu_setup_pcie() {
   local _ns_nvm_ident="${_ctrlr_ident}n${_ns_nvm_nsid}"
 
   local _ns_zns_nsid=2
-  local _ns_zns_lbads=12
+  local _ns_zns_lbads=9
   local _ns_zns_size="8G"
   local _ns_zns_ident="${_ctrlr_ident}n${_ns_zns_nsid}"
 
@@ -34,27 +34,33 @@ qemu_setup_pcie() {
   # Create the NVMe Controller configuration args
   _args="${_args} -device nvme,id=${_ctrlr_ident},serial=deadbeef,bus=pcie_downstream_port1,mdts=${_ctrlr_mdts}"
 
-  # Create the NVM Namespace backing image and QEMU configuration args
+  # Create the NVM Namespace backing-image and QEMU configuration args
   qemu::img_create "${_ns_nvm_ident}" "raw" "${_ns_nvm_size}"
   _args="${_args} $(qemu::args_drive ${_ns_nvm_ident} raw)"
 
-  _args="${_args} -device nvme-ns,id=${_ns_nvm_ident},drive=${_ns_nvm_ident},bus=${_ctrlr_ident},nsid=${_ns_nvm_nsid},lbads=${_ns_nvm_lbads}"
+  _args="${_args} -device nvme-ns,id=${_ns_nvm_ident},drive=${_ns_nvm_ident},bus=${_ctrlr_ident},nsid=${_ns_nvm_nsid}"
 
-  # Create the Zoned Namespace backing images and QEMU configuration args
+  # Create the Zoned Namespace backing-image and QEMU configuration args
   qemu::img_create "${_ns_zns_ident}" "raw" "${_ns_zns_size}"
   _args="${_args} $(qemu::args_drive ${_ns_zns_ident} raw)"
 
-  qemu::img_create "${_ns_zns_ident}-zoneinfo" "raw" "0"
-  _args="${_args} $(qemu::args_drive ${_ns_zns_ident}-zoneinfo raw)"
+  # Namespace setup
+  _args="${_args} -device nvme-ns,id=${_ns_zns_ident}"
+  _args="${_args},drive=${_ns_zns_ident}"
+  _args="${_args},bus=${_ctrlr_ident}"
+  _args="${_args},nsid=${_ns_zns_nsid}"
 
-  _args="${_args}  -device nvme-ns,id=${_ns_zns_ident},drive=${_ns_zns_ident},bus=${_ctrlr_ident},nsid=${_ns_zns_nsid},lbads=${_ns_zns_lbads}"
-  _args="${_args},iocs=0x2,zns.zcap=4096,zns.zoneinfo=${_ns_zns_ident}-zoneinfo"
+  # ZNS specific args in LBAs
+  local _zsze=8192
+  local _zcap=4096
+  local _foo=256
 
-  # ZNS specific args
-  _args="${_args},zns.zdes=0"
-  _args="${_args},zns.zoc=0"
-  _args="${_args},zns.mar=383"
-  _args="${_args},zns.mor=383"
+  _args="${_args},zoned=on"
+  _args="${_args},zoned.zone_size=$((_zsze << 12))"
+  _args="${_args},zoned.zone_capacity=$((_zcap <<12))"
+  _args="${_args},zoned.max_active=${_foo}"
+  _args="${_args},zoned.max_open=${_foo}"
 
   : "${QEMU_SETUP_PCIE=${_args}}"; export QEMU_SETUP_PCIE
 }
+
