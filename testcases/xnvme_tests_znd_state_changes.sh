@@ -1,6 +1,8 @@
 #!/bin/bash
 #
-# Verify that CLI `zoned changes` runs without error
+# Verify that CLI `xnvme_tests_znd_state` runs without error
+#
+# Fundamental check
 #
 # shellcheck disable=SC2119
 #
@@ -11,9 +13,10 @@ source "$CIJ_ROOT/modules/cijoe.sh"
 test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
+: "${SLBA:=0x0}"
 
-if ! ssh::cmd "zoned changes $XNVME_URI"; then
-  cij::info "Failed retrieving the Changed Zone List; possibly due to lack of support"
+if ! ssh::cmd "xnvme_tests_znd_state changes $XNVME_URI"; then
+  test::fail
 fi
 
 test::pass

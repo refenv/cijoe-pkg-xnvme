@@ -63,7 +63,7 @@ elif [[ -v XNVME_BE && "$XNVME_BE" == "linux" ]]; then
       XNVME_URI="/dev/nullb0"; export XNVME_URI
       ;;
     zoned)
-      XNVME_URI="dev/nullb1"; export XNVME_URI
+      XNVME_URI="/dev/nullb1"; export XNVME_URI
       ;;
     esac
   else
