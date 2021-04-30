@@ -60,10 +60,6 @@ qemu_setup_pcie() {
   _args="${_args},zoned.zone_capacity=$((_zcap <<12))"
   _args="${_args},zoned.max_active=${_foo}"
   _args="${_args},zoned.max_open=${_foo}"
-  _args="${_args},zoned.zrwas=16"
-  _args="${_args},zoned.zrwafg=8"
-  _args="${_args},zoned.numzrwa=${_foo}"
-
 
   : "${QEMU_SETUP_PCIE=${_args}}"; export QEMU_SETUP_PCIE
 }
