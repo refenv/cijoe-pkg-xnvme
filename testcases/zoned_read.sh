@@ -15,11 +15,10 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-: "${NSID:=0x1}"
 : "${SLBA:=0x1}"
 : "${NLB:=0}"
 
-if ! ssh::cmd "zoned read $XNVME_URI --nsid $NSID --slba $SLBA --nlb $NLB"; then
+if ! ssh::cmd "zoned read $XNVME_URI --slba $SLBA --nlb $NLB"; then
   test::fail
 fi
 
