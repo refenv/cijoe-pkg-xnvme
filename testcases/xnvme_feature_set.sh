@@ -16,7 +16,7 @@ test::enter
 : "${FEAT:=0x1}"
 : "${SAVE:=--save}"
 
-if ! ssh::cmd "xnvme feature-set $XNVME_URI --fid $FID --feat $FEAT $SAVE"; then
+if ! cij::cmd "xnvme feature-set $XNVME_URI --fid $FID --feat $FEAT $SAVE"; then
   test::fail
 fi
 

@@ -12,7 +12,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "xnvme idfy-ctrlr $XNVME_URI"; then
+if ! cij::cmd "xnvme idfy-ctrlr $XNVME_URI"; then
   test::fail
 fi
 

@@ -12,7 +12,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "zoned changes $XNVME_URI"; then
+if ! cij::cmd "zoned changes $XNVME_URI"; then
   test::fail
 fi
 

@@ -15,7 +15,7 @@ test::enter
 : "${SLBA:=0x0}"
 : "${NLB:=0}"
 
-if ! ssh::cmd "lblk write-zeros $XNVME_URI --slba ${SLBA} --nlb ${NLB}"; then
+if ! cij::cmd "lblk write-zeros $XNVME_URI --slba ${SLBA} --nlb ${NLB}"; then
   test::fail
 fi
 

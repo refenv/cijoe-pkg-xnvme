@@ -35,7 +35,7 @@ if ! cij::cmd "lsblk"; then
   test::fail
 fi
 
-if ! ssh::cmd "xnvme_file copy-sync ${src_fpath} ${dst_fpath} --iosize=${iosize}"; then
+if ! cij::cmd "xnvme_file copy-sync ${src_fpath} ${dst_fpath} --iosize=${iosize}"; then
   test::fail
 fi
 

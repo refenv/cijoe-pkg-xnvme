@@ -14,7 +14,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "xnvme_hello hw $XNVME_URI"; then
+if ! cij::cmd "xnvme_hello hw $XNVME_URI"; then
   test::fail
 fi
 

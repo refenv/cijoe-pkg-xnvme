@@ -14,7 +14,7 @@ test::enter
 
 COUNT=4
 
-if ! ssh::cmd "xnvme_tests_enum open --count ${COUNT}"; then
+if ! cij::cmd "xnvme_tests_enum open --count ${COUNT}"; then
   test::fail
 fi
 

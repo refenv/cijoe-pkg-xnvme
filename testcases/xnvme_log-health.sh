@@ -17,7 +17,7 @@ test::enter
 : "${NSID:=0xFFFFFFFF}"
 : "${NBYTES:=512}"
 
-if ! ssh::cmd "xnvme log-health $XNVME_URI --nsid $NSID --data-output /tmp/xnvme_log-health.bin"; then
+if ! cij::cmd "xnvme log-health $XNVME_URI --nsid $NSID --data-output /tmp/xnvme_log-health.bin"; then
   test::fail
 fi
 

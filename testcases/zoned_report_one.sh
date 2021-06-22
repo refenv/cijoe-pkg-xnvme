@@ -18,7 +18,7 @@ test::enter
 : "${SLBA:=0x0000000000026400}"
 : "${LIMIT:=1}"
 
-if ! ssh::cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT"; then
+if ! cij::cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT"; then
   test::fail
 fi
 

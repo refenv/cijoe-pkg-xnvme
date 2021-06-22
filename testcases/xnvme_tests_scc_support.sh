@@ -15,7 +15,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "xnvme_tests_scc support $XNVME_URI"; then
+if ! cij::cmd "xnvme_tests_scc support $XNVME_URI"; then
   test::fail
 fi
 

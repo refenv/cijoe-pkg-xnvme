@@ -22,7 +22,7 @@ test::enter
 : "${RAE:=0}"
 : "${NBYTES:=4096}"
 
-if ! ssh::cmd "xnvme log $XNVME_URI --lid $LID --lsp $LSP --lpo-nbytes $LPO_NBYTES --nsid $NSID --rae $RAE --data-nbytes $NBYTES --data-output /tmp/xnvme-log.bin"; then
+if ! cij::cmd "xnvme log $XNVME_URI --lid $LID --lsp $LSP --lpo-nbytes $LPO_NBYTES --nsid $NSID --rae $RAE --data-nbytes $NBYTES --data-output /tmp/xnvme-log.bin"; then
   test::fail
 fi
 

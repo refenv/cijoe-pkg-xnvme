@@ -27,7 +27,7 @@ for FID in "0x4" "0x5"; do
 
   cij::info "Getting feature with FID: ${FID} without setting select bit"
 
-  if ! ssh::cmd "xnvme feature-get $XNVME_URI --fid $FID"; then
+  if ! cij::cmd "xnvme feature-get $XNVME_URI --fid $FID"; then
     test::fail
   fi
 
@@ -42,7 +42,7 @@ for FID in "0x4" "0x5"; do
     "0x3") cij::info "Getting 'supported' value for fid: ${FID}" ;;
     esac
 
-    if ! ssh::cmd "xnvme feature-get $XNVME_URI --fid $FID --sel $SEL"; then
+    if ! cij::cmd "xnvme feature-get $XNVME_URI --fid $FID --sel $SEL"; then
       cij::warn "Device support for select-bit is not checked"
     fi
 

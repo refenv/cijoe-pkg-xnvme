@@ -18,11 +18,11 @@ test::enter
 : "${LIMIT:=1}"
 
 for ACTION in "mgmt-reset" "mgmt-open" "mgmt-close" "mgmt-finish"; do
-  if ! ssh::cmd "zoned $ACTION $XNVME_URI --slba $SLBA"; then
+  if ! cij::cmd "zoned $ACTION $XNVME_URI --slba $SLBA"; then
     test::fail
   fi
 
-  if ! ssh::cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT"; then
+  if ! cij::cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT"; then
     test::fail
   fi
 done

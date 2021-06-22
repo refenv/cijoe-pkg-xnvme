@@ -20,19 +20,19 @@ test::enter
 : "${NLB:=1}"
 : "${SLBA:=0x0}"
 
-if ! ssh::cmd "zoned mgmt-reset $XNVME_URI --slba $SLBA"; then
+if ! cij::cmd "zoned mgmt-reset $XNVME_URI --slba $SLBA"; then
   test::fail
 fi
 
-if ! ssh::cmd "zoned append $XNVME_URI --slba $SLBA --nlb $NLB"; then
+if ! cij::cmd "zoned append $XNVME_URI --slba $SLBA --nlb $NLB"; then
   test::fail
 fi
 
-if ! ssh::cmd "zoned append $XNVME_URI --slba $SLBA --nlb $NLB"; then
+if ! cij::cmd "zoned append $XNVME_URI --slba $SLBA --nlb $NLB"; then
   test::fail
 fi
 
-if ! ssh::cmd "zoned append $XNVME_URI --slba $SLBA --nlb $NLB"; then
+if ! cij::cmd "zoned append $XNVME_URI --slba $SLBA --nlb $NLB"; then
   test::fail
 fi
 

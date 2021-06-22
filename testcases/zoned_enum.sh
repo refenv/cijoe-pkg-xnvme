@@ -14,7 +14,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "zoned enum"; then
+if ! cij::cmd "zoned enum"; then
   test::fail
 fi
 

@@ -21,7 +21,7 @@ test::enter
 : "${XNVME_SETID:=0x0}"
 : "${XNVME_UUID:=0x0}"
 
-if ! ssh::cmd "xnvme idfy $XNVME_URI --cns $XNVME_CNS --cntid $XNVME_CNTID --nsid $XNVME_NSID --setid $XNVME_SETID --uuid $XNVME_UUID"; then
+if ! cij::cmd "xnvme idfy $XNVME_URI --cns $XNVME_CNS --cntid $XNVME_CNTID --nsid $XNVME_NSID --setid $XNVME_SETID --uuid $XNVME_UUID"; then
   test::fail
 fi
 
