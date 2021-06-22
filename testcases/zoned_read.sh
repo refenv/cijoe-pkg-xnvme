@@ -18,7 +18,7 @@ test::enter
 : "${SLBA:=0x1}"
 : "${NLB:=0}"
 
-if ! ssh::cmd "zoned read $XNVME_URI --slba $SLBA --nlb $NLB"; then
+if ! cij::cmd "zoned read $XNVME_URI --slba $SLBA --nlb $NLB"; then
   test::fail
 fi
 

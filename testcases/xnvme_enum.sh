@@ -10,7 +10,7 @@ export CIJ_TEST_NAME
 source "$CIJ_ROOT/modules/cijoe.sh"
 test::enter
 
-if ! ssh::cmd "xnvme enum"; then
+if ! cij::cmd "xnvme enum"; then
   test::fail
 fi
 

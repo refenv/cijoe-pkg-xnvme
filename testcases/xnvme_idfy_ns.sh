@@ -17,7 +17,7 @@ test::enter
 
 : "${NSID:=0x1}"
 
-if ! ssh::cmd "xnvme idfy-ns $XNVME_URI --nsid $NSID"; then
+if ! cij::cmd "xnvme idfy-ns $XNVME_URI --nsid $NSID"; then
   test::fail
 fi
 

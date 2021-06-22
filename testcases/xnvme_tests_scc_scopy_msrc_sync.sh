@@ -14,7 +14,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "xnvme_tests_scc scopy-msrc $XNVME_URI --clear"; then
+if ! cij::cmd "xnvme_tests_scc scopy-msrc $XNVME_URI --clear"; then
   test::fail
 fi
 

@@ -16,7 +16,7 @@ test::enter
 QDEPTH=64
 
 for COUNT in 1 2 4 8 16 32 64 128; do
-  if ! ssh::cmd "xnvme_tests_async_intf init_term ${XNVME_URI} --count ${COUNT} --qdepth ${QDEPTH}"; then
+  if ! cij::cmd "xnvme_tests_async_intf init_term ${XNVME_URI} --count ${COUNT} --qdepth ${QDEPTH}"; then
     test::fail
   fi
 done

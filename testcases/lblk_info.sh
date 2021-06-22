@@ -12,7 +12,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "lblk info $XNVME_URI"; then
+if ! cij::cmd "lblk info $XNVME_URI"; then
   test::fail
 fi
 

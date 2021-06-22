@@ -17,7 +17,7 @@ test::enter
 : "${NSID:=0x0}"
 : "${NBYTES:=4096}"
 
-if ! ssh::cmd "xnvme log-erri $XNVME_URI --nsid $NSID --data-output /tmp/xnvme_log-erri.bin"; then
+if ! cij::cmd "xnvme log-erri $XNVME_URI --nsid $NSID --data-output /tmp/xnvme_log-erri.bin"; then
   test::fail
 fi
 

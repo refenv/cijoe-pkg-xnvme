@@ -19,19 +19,19 @@ test::enter
 : "${NLB:=0}"
 : "${LIMIT:=1}"
 
-if ! ssh::cmd "zoned mgmt-reset $XNVME_URI --slba $SLBA"; then
+if ! cij::cmd "zoned mgmt-reset $XNVME_URI --slba $SLBA"; then
   test::fail
 fi
 
-if ! ssh::cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT"; then
+if ! cij::cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT"; then
   test::fail
 fi
 
-if ! ssh::cmd "zoned write $XNVME_URI --slba $SLBA --nlb $NLB"; then
+if ! cij::cmd "zoned write $XNVME_URI --slba $SLBA --nlb $NLB"; then
   test::fail
 fi
 
-if ! ssh::cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT"; then
+if ! cij::cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT"; then
   test::fail
 fi
 

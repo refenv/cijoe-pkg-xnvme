@@ -14,7 +14,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "zoned_io_async read $XNVME_URI"; then
+if ! cij::cmd "zoned_io_async read $XNVME_URI"; then
   test::fail
 fi
 

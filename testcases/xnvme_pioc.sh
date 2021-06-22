@@ -17,7 +17,7 @@ test::enter
 : "${NSID:=0x1}"
 : "${OPCODE:=0x02}"     # read-command on I/O queue
 
-if ! ssh::cmd "xnvme info ${XNVME_URI} > /tmp/device-info.yml"; then
+if ! cij::cmd "xnvme info ${XNVME_URI} > /tmp/device-info.yml"; then
   test::fail
 fi
 if ! ssh::pull "/tmp/device-info.yml" "/tmp/device-info.yml"; then
@@ -28,15 +28,15 @@ DATA_NBYTES=$(cat < /tmp/device-info.yml | awk '/lba_nbytes:/ {print $2}')
 
 CMD_FPATH=$(mktemp -u --tmpdir=/tmp -t read_XXXXXX.nvmec)
 
-if ! ssh::cmd "nvmec create --opcode ${OPCODE} --nsid ${NSID} --cmd-output ${CMD_FPATH}"; then
+if ! cij::cmd "nvmec create --opcode ${OPCODE} --nsid ${NSID} --cmd-output ${CMD_FPATH}"; then
   test::fail
 fi
 
-if ! ssh::cmd "nvmec show --cmd-input ${CMD_FPATH}"; then
+if ! cij::cmd "nvmec show --cmd-input ${CMD_FPATH}"; then
   test::fail
 fi
 
-if ! ssh::cmd "xnvme pioc ${XNVME_URI} --cmd-input ${CMD_FPATH} --data-nbytes ${DATA_NBYTES}"; then
+if ! cij::cmd "xnvme pioc ${XNVME_URI} --cmd-input ${CMD_FPATH} --data-nbytes ${DATA_NBYTES}"; then
   test::fail
 fi
 

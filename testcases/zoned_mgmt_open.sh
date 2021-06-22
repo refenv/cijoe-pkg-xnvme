@@ -19,15 +19,15 @@ ZDI=$(python -c "print(\"\".join([chr(i % 26 + 65) for i in range(128)]))")
 echo -n "$ZDI" > "$ZDI_PATH"
 ssh::push "$ZDI_PATH" /tmp/zdi.bin
 
-if ! ssh::cmd "zoned mgmt-reset $XNVME_URI --slba $SLBA"; then
+if ! cij::cmd "zoned mgmt-reset $XNVME_URI --slba $SLBA"; then
   test::fail
 fi
 
-if ! ssh::cmd "zoned mgmt-open $XNVME_URI --slba $SLBA"; then
+if ! cij::cmd "zoned mgmt-open $XNVME_URI --slba $SLBA"; then
   test::fail
 fi
 
-if ! ssh::cmd "zoned report $XNVME_URI --slba $SLBA --limit 1 --data-output /tmp/report.bin"; then
+if ! cij::cmd "zoned report $XNVME_URI --slba $SLBA --limit 1 --data-output /tmp/report.bin"; then
   test::fail
 fi
 

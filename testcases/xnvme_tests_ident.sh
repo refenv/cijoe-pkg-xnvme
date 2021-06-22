@@ -10,7 +10,7 @@ export CIJ_TEST_NAME
 source "$CIJ_ROOT/modules/cijoe.sh"
 test::enter
 
-if ! ssh::cmd "xnvme_tests_ident ident_from_uri"; then
+if ! cij::cmd "xnvme_tests_ident ident_from_uri"; then
   test::fail
 fi
 

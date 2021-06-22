@@ -12,7 +12,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! ssh::cmd "lblk enum"; then
+if ! cij::cmd "lblk enum"; then
   test::fail
 fi
 
