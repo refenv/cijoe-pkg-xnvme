@@ -52,12 +52,18 @@ else
 fi
 
 #
-# xNVMe: define XNVME_URI
+# xNVMe: define XNVME_URI based on XNVME_BE and DEV_TYPE
 #
 if [[ -v XNVME_BE && "$XNVME_BE" == "spdk" ]]; then
     : "${XNVME_URI:=pci:${PCI_DEV_NAME}?nsid=${NVME_NSID}}"; export XNVME_URI
 elif [[ -v XNVME_BE && "$XNVME_BE" == "linux" ]]; then
+  if [[ -v DEV_TYPE && "$DEV_TYPE" == "char" ]]; then
+    : "${XNVME_URI:=/dev/ng${NVME_CNTID}n${NVME_NSID}}"; export XNVME_URI
+  elif [[ -v DEV_TYPE && "$DEV_TYPE" == "nullblk" ]]; then
+    : "${XNVME_URI:=/dev/nullb0}"; export XNVME_URI
+  else
     : "${XNVME_URI:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"; export XNVME_URI
+  fi
 elif [[ -v XNVME_BE && "$XNVME_BE" == "fbsd" ]]; then
     : "${XNVME_URI:=/dev/nvme${NVME_CNTID}ns${NVME_NSID}}"; export XNVME_URI
 fi
