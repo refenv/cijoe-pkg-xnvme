@@ -1,4 +1,4 @@
-descr: Verify base xNVMe functionality on Linux via NVMe device
+descr: Verify base xNVMe functionality using the SPDK backend
 descr_long: |
   Basic verification of xNVMe using through the different IO and control paths.
 hooks: ["sysinf"]
@@ -16,16 +16,17 @@ evars:
 
 
 testsuites:
-  - name: xnvme_base
-    alias: "xNVMe: verify base functionality using be:char/nvme/emu"
-    evars: { XNVME_BE: "char", XNVME_ASYNC: "emu" }
-    hooks: [ "xnvme" ]
-  - name: xnvme_base
-    alias: "xNVMe: verify base functionality using be:char/nvme/io_uring"
-    evars: { XNVME_BE: "char", XNVME_ASYNC: "io_uring" }
+  - name: xnvme_core
+    alias: "xNVMe: verify base functionality using be:spdk"
+    evars: { XNVME_BE: "spdk" }
     hooks: [ "xnvme" ]
 
-  - name: xnvme_base_no_multi
+  - name: xnvme_admin_no_multi
+    alias: "xNVMe: verify base functionality using be:spdk"
+    evars: { XNVME_BE: "spdk" }
+    hooks: [ "xnvme" ]
+
+  - name: xnvme_queue
     alias: "xNVMe: verify base functionality using be:spdk"
     evars: { XNVME_BE: "spdk" }
     hooks: [ "xnvme" ]
