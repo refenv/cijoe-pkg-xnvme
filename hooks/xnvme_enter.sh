@@ -45,7 +45,7 @@ hook::xnvme_enter() {
     XNVME_DRIVER_CMD="${XNVME_DRIVER_CMD} reset"
   esac
 
-  if ! ssh::cmd "${XNVME_DRIVER_CMD}"; then
+  if ! cij::cmd "${XNVME_DRIVER_CMD}"; then
     cij::err "hook::xnvme_enter: FAILED: detaching NVMe driver"
     return 1
   fi

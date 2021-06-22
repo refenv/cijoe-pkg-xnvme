@@ -26,7 +26,7 @@ hook::xnvme_exit() {
 
   cij::info "hook:xnvme_exit: XNVME_BE(${XNVME_BE})"
 
-  if ! ssh::cmd "xnvme-driver reset"; then
+  if ! cij::cmd "xnvme-driver reset"; then
     cij::err "hook::xnvme_exit: FAILED: setting NVMe drivers"
     return 1
   fi
