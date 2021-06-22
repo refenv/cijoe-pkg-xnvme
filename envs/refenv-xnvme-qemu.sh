@@ -4,7 +4,7 @@
 : "${QEMU_HOST:=localhost}"; export QEMU_HOST
 : "${QEMU_HOST_USER:=$USER}"; export QEMU_HOST_USER
 : "${QEMU_HOST_PORT:=22}"; export QEMU_HOST_PORT
-: "${QEMU_HOST_SYSTEM_BIN:=/opt/qemu/x86_64-softmmu/qemu-system-x86_64}"; export QEMU_HOST_SYSTEM_BIN
+: "${QEMU_HOST_SYSTEM_BIN:=/opt/qemu/bin/qemu-system-x86_64}"; export QEMU_HOST_SYSTEM_BIN
 : "${QEMU_HOST_IMG_BIN:=qemu-img}"; export QEMU_HOST_IMG_BIN
 
 : "${QEMU_GUESTS:=/opt/guests}"; export QEMU_GUESTS
@@ -16,7 +16,7 @@
 : "${QEMU_GUEST_CONSOLE:=sock}"; export QEMU_GUEST_CONSOLE
 #: "${QEMU_GUEST_HOST_SHARE:=$HOME/git}"; export QEMU_GUEST_CONSOLE
 : "${QEMU_GUEST_MEM:=6G}"; export QEMU_GUEST_MEM
-: "${QEMU_GUEST_SMP:=4}"; export QEMU_GUEST_SMPi
+: "${QEMU_GUEST_SMP:=4}"; export QEMU_GUEST_SMP
 # Use these to boot a custom kernel
 : "${QEMU_GUEST_KERNEL:=0}"; export QEMU_GUEST_KERNEL
 #: "${QEMU_GUEST_KERNEL:=1}"; export QEMU_GUEST_KERNEL
@@ -52,12 +52,18 @@ else
 fi
 
 #
-# xNVMe: define XNVME_URI
+# xNVMe: define XNVME_URI based on XNVME_BE and DEV_TYPE
 #
 if [[ -v XNVME_BE && "$XNVME_BE" == "spdk" ]]; then
     : "${XNVME_URI:=pci:${PCI_DEV_NAME}?nsid=${NVME_NSID}}"; export XNVME_URI
 elif [[ -v XNVME_BE && "$XNVME_BE" == "linux" ]]; then
+  if [[ -v DEV_TYPE && "$DEV_TYPE" == "char" ]]; then
+    : "${XNVME_URI:=/dev/ng${NVME_CNTID}n${NVME_NSID}}"; export XNVME_URI
+  elif [[ -v DEV_TYPE && "$DEV_TYPE" == "nullblk" ]]; then
+    : "${XNVME_URI:=/dev/nullb0}"; export XNVME_URI
+  else
     : "${XNVME_URI:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"; export XNVME_URI
+  fi
 elif [[ -v XNVME_BE && "$XNVME_BE" == "fbsd" ]]; then
     : "${XNVME_URI:=/dev/nvme${NVME_CNTID}ns${NVME_NSID}}"; export XNVME_URI
 fi
