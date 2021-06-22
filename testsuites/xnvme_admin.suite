@@ -1,5 +1,3 @@
-xnvme_library_info.sh
-xnvme_tests_ident.sh
 xnvme_enum.sh
 xnvme_info.sh
 xnvme_idfy_ctrlr.sh
@@ -13,11 +11,5 @@ xnvme_pioc.sh
 xnvme_feature_get.sh
 xnvme_feature_set.sh
 examples-xnvme_hello.sh
-xnvme_tests_async_intf01.sh
-xnvme_tests_async_intf02.sh
-xnvme_tests_async_intf03.sh
-xnvme_tests_async_intf04.sh
-xnvme_tests_enum_multi.sh
 xnvme_tests_enum_open.sh
-examples-xnvme_io_async_write.sh
-examples-xnvme_io_async_read.sh
+xnvme_tests_enum_multi.sh
