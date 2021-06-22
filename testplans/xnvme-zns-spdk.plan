@@ -1,0 +1,42 @@
+descr: Verify xNVMe Zoned Command Set using a SPDK NVMe driver
+descr_long: |
+  Basic verification of xNVMe using through the different IO and control paths.
+  Leaving out testing for changes-log as the qemu device does not support it
+hooks: ["sysinf"]
+evars:
+  CMD_PREFIX: " "
+  FIO_NRUNS: "1"
+  FIO_SECTION: "default"
+  FIO_SCRIPT: "xnvme-zoned.fio"
+  FIO_IOENG_NAME: "xnvme"
+  HUGEMEM: "4096"
+  NVME_NSTYPE: "zoned"
+  DEV_TYPE: "nvme"
+
+
+
+
+
+testsuites:
+  - name: xnvme_core
+    alias: "xNVMe: core library information and enumeration for convenience"
+    evars: { XNVME_BE: "spdk" }
+    hooks: [ "xnvme" ]
+
+  - name: xnvme_zns
+    alias: "xNVMe: Zoned Command Set (mandatory) using be:spdk"
+    evars: { XNVME_BE: "spdk" }
+    hooks: [ "xnvme" ]
+  - name: xnvme_zns_opt_append
+    alias: "xNVMe: Zoned Command Set (append) using be:spdk"
+    evars: { XNVME_BE: "spdk" }
+    hooks: [ "xnvme" ]
+#  - name: xnvme_zns_opt_changes
+#    alias: "xNVMe: Zoned Command Set (changes) using be:spdk"
+#    evars: { XNVME_BE: "spdk" }
+#    hooks: [ "xnvme" ]
+
+  - name: xnvme_zns_io
+    alias: "xNVMe: Zoned Command Set (I/O) using be:spdk"
+    evars: { XNVME_BE: "spdk" }
+    hooks: [ "xnvme" ]

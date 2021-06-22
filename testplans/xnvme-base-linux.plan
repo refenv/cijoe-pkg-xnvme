@@ -1,0 +1,32 @@
+descr: Verify base xNVMe functionality using the Linux backend
+descr_long: |
+  Basic verification of xNVMe using through the different IO and control paths.
+hooks: ["sysinf"]
+evars:
+  CMD_PREFIX: " "
+  FIO_NRUNS: "1"
+  FIO_SECTION: "default"
+  FIO_SCRIPT: "xnvme-verify.fio"
+  FIO_IOENG_NAME: "xnvme"
+  HUGEMEM: "4096"
+  NVME_NSTYPE: "lblk"
+  DEV_TYPE: "nvme"
+
+
+
+
+testsuites:
+  - name: xnvme_core
+    alias: "xNVMe: verify base functionality using be:linux"
+    evars: { XNVME_BE: "linux" }
+    hooks: [ "xnvme" ]
+
+  - name: xnvme_admin_no_multi
+    alias: "xNVMe: verify base functionality using be:linux"
+    evars: { XNVME_BE: "linux" }
+    hooks: [ "xnvme" ]
+
+  - name: xnvme_queue
+    alias: "xNVMe: verify base functionality using be:linux"
+    evars: { XNVME_BE: "linux" }
+    hooks: [ "xnvme" ]
