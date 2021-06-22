@@ -56,7 +56,7 @@ xnvme::fioe() {
   local jobfile="${XNVME_SHARE_ROOT}/${script_fname}"
   local _cmd
 
-  if ! ssh::cmd "[[ -f \"${jobfile}\" ]]"; then
+  if ! cij::cmd "[[ -f \"${jobfile}\" ]]"; then
     cij::err "xnvme:fioe: '${jobfile}' does not exist!"
     return 1
   fi
@@ -80,7 +80,7 @@ xnvme::fioe() {
     local _fioe_so="${XNVME_LIB_ROOT}/libxnvme-fio-engine.so"
     local _fioe_uri=${XNVME_URI//:/\\\\:}
 
-    if ! ssh::cmd "[[ -f \"${_fioe_so}\" ]]"; then
+    if ! cij::cmd "[[ -f \"${_fioe_so}\" ]]"; then
       cij::err "xnvme:fioe: '${_fioe_so}' does not exist!"
       return 1
     fi
@@ -124,7 +124,7 @@ xnvme::fioe() {
   _cmd="${_cmd} --output-format=normal,json --output=${_trgt_fname}"
 
   # Now run that fio tester!
-  if ! ssh::cmd "${_cmd}"; then
+  if ! cij::cmd "${_cmd}"; then
     cij::err "xnvme::fioe: error running fio"
 
     ssh::pull "${_trgt_fname}" "${output_fpath}"

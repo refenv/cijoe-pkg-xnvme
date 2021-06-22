@@ -98,7 +98,7 @@ nullblk::create() {
     _devname="nullb${_id}"
     _cfg_path="${_kpath}/${_devname}"
 
-    if ssh::cmd "mkdir ${_cfg_path}"; then
+    if cij::cmd "mkdir ${_cfg_path}"; then
       break
     fi
 
@@ -131,7 +131,7 @@ nullblk::create() {
 
   _cmd="${_cmd} && echo '1' >> ${_cfg_path}/power"
 
-  if ! ssh::cmd "${_cmd}"; then
+  if ! cij::cmd "${_cmd}"; then
     cij::err "nullblk:::create: failed creating nullblk instance: '${_devname}'"
     return 1
   fi
@@ -155,7 +155,7 @@ nullblk::insert() {
     cij::info "nullblk::insert: nr_devices > 0; doing stuff"
   fi
 
-  if ! ssh::cmd "modprobe ${NULLBLK_MODULE_NAME} ${NULLBLK_PARAMS}"; then
+  if ! cij::cmd "modprobe ${NULLBLK_MODULE_NAME} ${NULLBLK_PARAMS}"; then
     cij::err "nullblk:::insert: failed modprobe"
     return 1
   fi
@@ -169,10 +169,10 @@ nullblk::remove() {
     return 1
   fi
 
-  if ! ssh::cmd "rmdir /sys/kernel/config/nullb/nullb*"; then
+  if ! cij::cmd "rmdir /sys/kernel/config/nullb/nullb*"; then
     cij::info "nullblk:::remove: failed removing instances"
   fi
-  if ! ssh::cmd "modprobe -r ${NULLBLK_MODULE_NAME}"; then
+  if ! cij::cmd "modprobe -r ${NULLBLK_MODULE_NAME}"; then
     cij::err "nullblk:::remove: failed removing module"
     return 1
   fi
