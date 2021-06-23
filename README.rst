@@ -5,8 +5,8 @@ cijoe-pkg-xnvme: cijoe testcases and testplans for xNVMe
    :target: https://pypi.org/project/cijoe-pkg-xnvme
    :alt: PyPI
 
-.. image:: https://travis-ci.com/refenv/cijoe-pkg-xnvme.svg?branch=master
-   :target: https://travis-ci.com/refenv/cijoe-pkg-xnvme
+.. image:: https://github.com/refenv/cijoe-pkg-xnvme/workflows/selftest/badge.svg
+   :target: https://github.com/refenv/cijoe-pkg-xnvme/actions
    :alt: Build Status
 
 Install
@@ -17,6 +17,12 @@ The package is distributed via PyPi, run the following to command to install:
 .. code-block:: bash
 
   pip install --user cijoe-pkg-xnvme
+
+To install the development preview, install:
+
+.. code-block:: bash
+
+  pip install --user --pre cijoe-pkg-xnvme
 
 See the `Cijoe` for additional documentation.
 
