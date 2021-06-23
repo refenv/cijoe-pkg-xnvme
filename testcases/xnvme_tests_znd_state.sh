@@ -15,7 +15,7 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-if ! cij::cmd "xnvme_tests_znd_state state $XNVME_URI"; then
+if ! cij::cmd "xnvme_tests_znd_state transition $XNVME_URI"; then
   test::fail
 fi
 
