@@ -54,7 +54,7 @@ testsuites:
 #    alias: "xNVMe: Zoned Command Set (I/O) using be:linux/async:libaio"
 #    evars: { XNVME_BE: "linux", XNVME_ASYNC: "libaio" }
 #    hooks: [ "xnvme" ]
-#  - name: xnvme_zns_io
-#    alias: "xNVMe: Zoned Command Set (I/O) using be:linux/async:io_uring"
-#    evars: { XNVME_BE: "linux", XNVME_ASYNC: "io_uring" }
-#    hooks: [ "xnvme" ]
+  - name: xnvme_zns_io
+    alias: "xNVMe: Zoned Command Set (I/O) using be:linux/async:io_uring"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "io_uring" }
+    hooks: [ "xnvme" ]

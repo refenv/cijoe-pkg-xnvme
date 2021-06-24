@@ -47,10 +47,10 @@ testsuites:
 #    evars: { XNVME_BE: "linux", XNVME_ASYNC: "libaio" }
 #    hooks: [ "xnvme" ]
 
-#  - name: xnvme_nvm_io
-#    alias: "xNVMe: NVM Command Set using be:linux/async:io_uring"
-#    evars: { XNVME_BE: "linux", XNVME_ASYNC: "io_uring" }
-#    hooks: [ "xnvme" ]
+  - name: xnvme_nvm_io
+    alias: "xNVMe: NVM Command Set using be:linux/async:io_uring"
+    evars: { XNVME_BE: "linux", XNVME_ASYNC: "io_uring" }
+    hooks: [ "xnvme" ]
 
   - name: xnvme_nvm_opt_scc
     alias: "xNVMe: NVM Command Set (Simple-Copy) using be:linux"
