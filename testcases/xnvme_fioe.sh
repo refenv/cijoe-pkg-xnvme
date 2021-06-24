@@ -34,7 +34,8 @@ for FIO_IODEPTH in $FIO_IODEPTH_LIST; do
   for FIO_BS in $FIO_BS_LIST; do
     for i in $(seq "$FIO_NRUNS"); do
       cij::info "run: ${i}/${FIO_NRUNS}"
-      if ! xnvme::fioe "${FIO_SCRIPT}" "${FIO_IOENG_NAME}" "${FIO_SECTION}" "${CIJ_TEST_AUX_ROOT}/fio-output-iodepth:${FIO_IODEPTH}-bs:${FIO_BS}-run:${i}.txt"; then
+      if ! xnvme::fioe "${FIO_SCRIPT}" "${FIO_IOENG_NAME}" "${FIO_SECTION}" \
+        "${CIJ_TEST_AUX_ROOT}/fio-output-iodepth_${FIO_IODEPTH}-bs_${FIO_BS}-run_${i}.txt"; then
         test::fail
       fi
     done
