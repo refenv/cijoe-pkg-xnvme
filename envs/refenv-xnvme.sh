@@ -11,38 +11,45 @@
 
 # Select other values based on 'NVME_NSTYPE' defined in testplan
 if [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "lblk" ]]; then
-  : "${PCI_DEV_NAME:=0000:01:00.0}"; export PCI_DEV_NAME
-  : "${NVME_CNTID:=0}"; export NVME_CNTID
-  : "${NVME_NSID:=1}"; export NVME_NSID
+  PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
+  NVME_CNTID="0"; export NVME_CNTID
+  NVME_NSID="1"; export NVME_NSID
 elif [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "zoned" ]]; then
-  : "${PCI_DEV_NAME:=0000:01:00.0}"; export PCI_DEV_NAME
-  : "${NVME_CNTID:=0}"; export NVME_CNTID
-  : "${NVME_NSID:=2}"; export NVME_NSID
+  PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
+  NVME_CNTID="0"; export NVME_CNTID
+  NVME_NSID="2"; export NVME_NSID
 elif [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "kvs" ]]; then
-  : "${PCI_DEV_NAME:=0000:01:00.0}"; export PCI_DEV_NAME
-  : "${NVME_CNTID:=0}"; export NVME_CNTID
-  : "${NVME_NSID:=3}"; export NVME_NSID
+  PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
+  NVME_CNTID="0"; export NVME_CNTID
+  NVME_NSID="3"; export NVME_NSID
 else
-  : "${PCI_DEV_NAME:=0000:01:00.0}"; export PCI_DEV_NAME
-  : "${NVME_CNTID:=0}"; export NVME_CNTID
-  : "${NVME_NSID:=1}"; export NVME_NSID
+  PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
+  NVME_CNTID="0"; export NVME_CNTID
+  NVME_NSID="1"; export NVME_NSID
 fi
 
 #
 # xNVMe: define XNVME_URI based on XNVME_BE and DEV_TYPE
 #
 if [[ -v XNVME_BE && "$XNVME_BE" == "spdk" ]]; then
-    : "${XNVME_URI:=pci:${PCI_DEV_NAME}?nsid=${NVME_NSID}}"; export XNVME_URI
+  XNVME_URI="pci:${PCI_DEV_NAME}?nsid=${NVME_NSID}"; export XNVME_URI
 elif [[ -v XNVME_BE && "$XNVME_BE" == "linux" ]]; then
-  if [[ -v DEV_TYPE && "$DEV_TYPE" == "char" ]]; then
-    : "${XNVME_URI:=/dev/ng${NVME_CNTID}n${NVME_NSID}}"; export XNVME_URI
-  elif [[ -v DEV_TYPE && "$DEV_TYPE" == "nullblk" ]]; then
-    : "${XNVME_URI:=/dev/nullb0}"; export XNVME_URI
+  if [[ -v DEV_TYPE && "${DEV_TYPE}" == "nullblk" ]]; then
+    case $NVME_NSTYPE in
+    lblk)
+      XNVME_URI="/dev/nullb0"; export XNVME_URI
+      ;;
+    zoned)
+      XNVME_URI="/dev/nullb1"; export XNVME_URI
+      ;;
+    esac
+  elif [[ -v DEV_TYPE && "${DEV_TYPE}" == "char" ]]; then
+    XNVME_URI:=/dev/ng${NVME_CNTID}n${NVME_NSID}}"; export XNVME_URI
   else
-    : "${XNVME_URI:=/dev/nvme${NVME_CNTID}n${NVME_NSID}}"; export XNVME_URI
+    XNVME_URI="/dev/nvme${NVME_CNTID}n${NVME_NSID}"; export XNVME_URI
   fi
 elif [[ -v XNVME_BE && "$XNVME_BE" == "fbsd" ]]; then
-    : "${XNVME_URI:=/dev/nvme${NVME_CNTID}ns${NVME_NSID}}"; export XNVME_URI
+  XNVME_URI="/dev/nvme${NVME_CNTID}ns${NVME_NSID}"; export XNVME_URI
 fi
 
 # xNVMe: add mixins to XNVME_URI
