@@ -10,8 +10,6 @@ export CIJ_TEST_NAME
 source "$CIJ_ROOT/modules/cijoe.sh"
 test::enter
 
-: "${XNVME_URI:?Must be set and non-empty}"
-
 if ! cij::cmd "lblk enum"; then
   test::fail
 fi

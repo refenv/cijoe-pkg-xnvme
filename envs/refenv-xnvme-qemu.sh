@@ -55,8 +55,8 @@ fi
 # xNVMe: define XNVME_URI based on XNVME_BE and DEV_TYPE
 #
 if [[ -v XNVME_BE && "$XNVME_BE" == "spdk" ]]; then
-  XNVME_URI="pci:${PCI_DEV_NAME}?nsid=${NVME_NSID}"; export XNVME_URI
-elif [[ -v XNVME_BE && "$XNVME_BE" == "linux" ]]; then
+  XNVME_URI="${PCI_DEV_NAME}"; export XNVME_URI
+elif [[ -v XNVME_BE && "${XNVME_BE}" == "linux" ]]; then
   if [[ -v DEV_TYPE && "${DEV_TYPE}" == "nullblk" ]]; then
     case $NVME_NSTYPE in
     lblk)
@@ -67,23 +67,15 @@ elif [[ -v XNVME_BE && "$XNVME_BE" == "linux" ]]; then
       ;;
     esac
   elif [[ -v DEV_TYPE && "${DEV_TYPE}" == "char" ]]; then
-    XNVME_URI="/dev/ng${NVME_CNTID}n${NVME_NSID}}"; export XNVME_URI
+    XNVME_URI="/dev/ng${NVME_CNTID}n${NVME_NSID}"; export XNVME_URI
   else
     XNVME_URI="/dev/nvme${NVME_CNTID}n${NVME_NSID}"; export XNVME_URI
   fi
 elif [[ -v XNVME_BE && "$XNVME_BE" == "fbsd" ]]; then
   XNVME_URI="/dev/nvme${NVME_CNTID}ns${NVME_NSID}"; export XNVME_URI
 fi
-
-# xNVMe: add mixins to XNVME_URI
-if [[ -v XNVME_URI && -v XNVME_ADMIN ]]; then
-  XNVME_URI="${XNVME_URI}?admin=${XNVME_ADMIN}"; export XNVME_URI
-fi
-if [[ -v XNVME_URI && -v XNVME_SYNC ]]; then
-  XNVME_URI="${XNVME_URI}?sync=${XNVME_SYNC}"; export XNVME_URI
-fi
-if [[ -v XNVME_URI && -v XNVME_ASYNC ]]; then
-  XNVME_URI="${XNVME_URI}?async=${XNVME_ASYNC}"; export XNVME_URI
+if [[ -v XNVME_BE ]]; then
+  XNVME_DEV_NSID="${NVME_NSID}"; export XNVME_DEV_NSID
 fi
 
 # xNVMe: where are libraries and share stored on the target system? This is

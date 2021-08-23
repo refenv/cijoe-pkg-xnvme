@@ -1,14 +1,18 @@
-Most of testcases used in the testplans here assume that a device-uri is
-provided in the environment definition, that is, the environment variable
-``XNVME_URI`` is set.
+Testplans for release
+=====================
 
-Checking the environment variable is done by::
+The following are run::
 
-  : "${XNVME_URI:?Must be set and non-empty}"
+  xnvme-base-linux.plan
+  xnvme-base-spdk.plan
+  xnvme-base-fbsd.plan
 
-So, if you see that error. That is why.
+  xnvme-nvm-linux-char.plan
+  xnvme-nvm-linux-null.plan
+  xnvme-nvm-linux-nvme.plan
+  xnvme-nvm-spdk.plan
 
-Adding to that. The preferred way to assign ``XNVME_URI`` is to set it based on
-the value of ``XNVME_BE``, and then control ``XNVME_BE`` from the testplan.
-
-Have a look at the testplans and the reference environment.
+  xnvme-zns-linux-char.plan
+  xnvme-zns-linux-null.plan
+  xnvme-zns-linux-nvme.plan
+  xnvme-zns-spdk.plan

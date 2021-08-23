@@ -2,9 +2,6 @@
 #
 # Verify that the CLI `xnvme idfy` runs without error
 #
-# This is using XNVME_NSID=0x1, this test can have the identify arguments
-# overwritten by environment values, see the source
-#
 # shellcheck disable=SC2119
 #
 CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
@@ -15,13 +12,23 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-: "${XNVME_CNS:=0x0}"
-: "${XNVME_CNTID:=0x0}"
-: "${XNVME_NSID:=0x1}"
-: "${XNVME_SETID:=0x0}"
-: "${XNVME_UUID:=0x0}"
+: "${XNVME_DEV_NSID:?Must be set and non-empty}"
+: "${XNVME_BE:?Must be set and non-empty}"
+: "${XNVME_ADMIN:?Must be set and non-empty}"
 
-if ! cij::cmd "xnvme idfy $XNVME_URI --cns $XNVME_CNS --cntid $XNVME_CNTID --nsid $XNVME_NSID --setid $XNVME_SETID --uuid $XNVME_UUID"; then
+# Instrumentation of the xNVMe runtime
+XNVME_RT_ARGS=""
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --dev-nsid ${XNVME_DEV_NSID}"
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --be ${XNVME_BE}"
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --admin ${XNVME_ADMIN}"
+
+: "${CMD_CNS:=0x0}"
+: "${CMD_CNTID:=0x0}"
+: "${CMD_NSID:=${XNVME_DEV_NSID}}"
+: "${CMD_SETID:=0x0}"
+: "${CMD_UUID:=0x0}"
+
+if ! cij::cmd "xnvme idfy ${XNVME_URI} --cns ${CMD_CNS} --cntid ${CMD_CNTID} --nsid ${CMD_NSID} --setid ${CMD_SETID} --uuid ${CMD_UUID} ${XNVME_RT_ARGS}"; then
   test::fail
 fi
 

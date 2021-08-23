@@ -14,10 +14,20 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-: "${NSID:=0xFFFFFFFF}"
-: "${NBYTES:=512}"
+: "${XNVME_DEV_NSID:?Must be set and non-empty}"
+: "${XNVME_BE:?Must be set and non-empty}"
+: "${XNVME_ADMIN:?Must be set and non-empty}"
 
-if ! cij::cmd "xnvme log-health $XNVME_URI --nsid $NSID --data-output /tmp/xnvme_log-health.bin"; then
+# Instrumentation of the xNVMe runtime
+XNVME_RT_ARGS=""
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --dev-nsid ${XNVME_DEV_NSID}"
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --be ${XNVME_BE}"
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --admin ${XNVME_ADMIN}"
+
+: "${CMD_NSID:=0xFFFFFFFF}"
+: "${CMD_NBYTES:=512}"
+
+if ! cij::cmd "xnvme log-health ${XNVME_URI} --nsid $CMD_NSID --data-output /tmp/xnvme_log-health.bin ${XNVME_RT_ARGS}"; then
   test::fail
 fi
 

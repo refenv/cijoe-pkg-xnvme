@@ -2,8 +2,8 @@
 #
 # Verify that the CLI `xnvme idfy-ns` runs without error
 #
-# This is using XNVME_NSID=0x1, this test can have the identify arguments
-# overwritten by environment values, see the source
+# Notice that for the cli-tool there is a difference between '--nsid' the namespace-identifier used
+# in the constructed command and '--dev-nsid' the namespace-identifer for the device handle
 #
 # shellcheck disable=SC2119
 #
@@ -14,10 +14,18 @@ source "$CIJ_ROOT/modules/cijoe.sh"
 test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
+: "${XNVME_DEV_NSID:?Must be set and non-empty}"
+: "${XNVME_BE:?Must be set and non-empty}"
+: "${XNVME_ADMIN:?Must be set and non-empty}"
 
-: "${NSID:=0x1}"
+# Instrumentation of the xNVMe runtime
+XNVME_RT_ARGS=""
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --nsid ${XNVME_DEV_NSID}"
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --dev-nsid ${XNVME_DEV_NSID}"
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --be ${XNVME_BE}"
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --admin ${XNVME_ADMIN}"
 
-if ! cij::cmd "xnvme idfy-ns $XNVME_URI --nsid $NSID"; then
+if ! cij::cmd "xnvme idfy-ns ${XNVME_URI} ${XNVME_RT_ARGS}"; then
   test::fail
 fi
 

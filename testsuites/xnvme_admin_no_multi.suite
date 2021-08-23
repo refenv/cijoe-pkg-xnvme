@@ -1,4 +1,3 @@
-xnvme_enum.sh
 xnvme_info.sh
 xnvme_idfy_ctrlr.sh
 xnvme_idfy_ns.sh

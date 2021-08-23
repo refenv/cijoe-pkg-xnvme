@@ -41,7 +41,7 @@ xnvme::fioe() {
   fi
 
   if ! xnvme::env; then
-    cij::err "xnvme:fio_compare: invalid xNVMe environment"
+    cij::err "xnvme:fioe: invalid xNVMe environment"
     return 1
   fi
 
@@ -76,6 +76,9 @@ xnvme::fioe() {
   # Add the special-sauce for the external xNVMe fio engine
   if [[ "$ioengine_name" == *"xnvme"* ]]; then
     : "${XNVME_URI:?Must be set and non-empty}"
+    : "${XNVME_ASYNC:?Must be set and non-empty}"
+    : "${XNVME_SYNC:?Must be set and non-empty}"
+    : "${XNVME_ADMIN:?Must be set and non-empty}"
 
     local _fioe_so="${XNVME_LIB_ROOT}/libxnvme-fio-engine.so"
     local _fioe_uri=${XNVME_URI//:/\\\\:}
@@ -86,6 +89,10 @@ xnvme::fioe() {
     fi
 
     _cmd="${_cmd} --ioengine=external:${_fioe_so}"
+    _cmd="${_cmd} --xnvme_async=${XNVME_ASYNC}"
+    _cmd="${_cmd} --xnvme_sync=${XNVME_SYNC}"
+    _cmd="${_cmd} --xnvme_admin=${XNVME_ADMIN}"
+    _cmd="${_cmd} --xnvme_dev_nsid=${XNVME_DEV_NSID}"
     _cmd="${_cmd} --filename=${_fioe_uri}"
 
   # Add the special-sauce for the external SPDK io-engine spdk_nvme

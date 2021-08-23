@@ -2,6 +2,8 @@
 #
 # Verify that CLI `xnvme padc` runs without error
 #
+# Send and identify-controller via cli-passthru-interface 'xnvme padc'
+#
 # shellcheck disable=SC2119
 #
 CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
@@ -12,13 +14,23 @@ test::enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
-: "${OPCODE:=0x02}"     # Identify
-: "${CNS:=0x1}"         # Identify-controller
-: "${DATA_NBYTES:=4096}"
+: "${XNVME_DEV_NSID:?Must be set and non-empty}"
+: "${XNVME_BE:?Must be set and non-empty}"
+: "${XNVME_ADMIN:?Must be set and non-empty}"
+
+# Setup args for instrumentation of the xNVMe runtime
+XNVME_RT_ARGS=""
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --dev-nsid ${XNVME_DEV_NSID}"
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --be ${XNVME_BE}"
+XNVME_RT_ARGS="${XNVME_RT_ARGS} --admin ${XNVME_ADMIN}"
+
+: "${CMD_OPCODE:=0x02}"     # Identify
+: "${CMD_CNS:=0x1}"         # Identify-controller
+: "${CMD_DATA_NBYTES:=4096}"
 
 CMD_FPATH=$(mktemp -u --tmpdir=/tmp -t glp_XXXXXX.nvmec)
 
-if ! cij::cmd "nvmec create --opcode ${OPCODE} --cdw10 ${CNS} --cmd-output ${CMD_FPATH}"; then
+if ! cij::cmd "nvmec create --opcode ${CMD_OPCODE} --cdw10 ${CMD_CNS} --cmd-output ${CMD_FPATH}"; then
   test::fail
 fi
 
@@ -28,7 +40,7 @@ fi
 
 cij::info "Passing command through"
 
-if ! cij::cmd "xnvme padc ${XNVME_URI} --cmd-input ${CMD_FPATH} --data-nbytes ${DATA_NBYTES}"; then
+if ! cij::cmd "xnvme padc ${XNVME_URI} --cmd-input ${CMD_FPATH} --data-nbytes ${CMD_DATA_NBYTES} ${XNVME_RT_ARGS}"; then
   test::fail
 fi
 
