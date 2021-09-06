@@ -29,6 +29,15 @@
 : "${SSH_NO_CHECKS:=1}"; export SSH_NO_CHECKS
 
 #
+# NVMe-over-Fabrics info; setup identifying Fabrics endpoint(target)
+#
+#NVMEF_TRANSPORT="TCP"; export NVMEF_TRANSPORT
+#NVMEF_TARGET_ADDR="IP-address-of-NVMEF-target"; export NVMEF_TARGET_ADDR
+#NVMEF_TARGET_PORT="4420"; export NVMEF_TARGET_PORT
+#NVMEF_TARGET_XNVME_REPOS_PATH="/somewhere/on/the/fabrics/host"; export NVMEF_TARGET_XNVME_REPOS_PATH
+#
+
+#
 # PCIe and NVMe info; setup identifying the PCI device to use, the NVMe-
 #
 
@@ -55,7 +64,11 @@ fi
 # xNVMe: define XNVME_URI based on XNVME_BE and DEV_TYPE
 #
 if [[ -v XNVME_BE && "$XNVME_BE" == "spdk" ]]; then
-  XNVME_URI="${PCI_DEV_NAME}"; export XNVME_URI
+  if [[ -v NVMEF_TARGET_ADDR && -v NVMEF_TARGET_PORT ]]; then
+    XNVME_URI="${NVMEF_TARGET_ADDR}:${NVMEF_TARGET_PORT}"; export XNVME_URI
+  else
+    XNVME_URI="${PCI_DEV_NAME}"; export XNVME_URI
+  fi
 elif [[ -v XNVME_BE && "${XNVME_BE}" == "linux" ]]; then
   if [[ -v DEV_TYPE && "${DEV_TYPE}" == "nullblk" ]]; then
     case $NVME_NSTYPE in

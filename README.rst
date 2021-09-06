@@ -30,6 +30,15 @@ If you find bugs or need help then feel free to submit an `Issue`_. If you want
 to get involved head over to the `GitHub page`_ to get the source code and
 submit a `Pull request`_ with your changes.
 
+Test-target Environment
+=======================
+
+On the test-target, make sure you install::
+
+  lshw
+  screen
+  time
+
 .. _Cijoe: https://cijoe.readthedocs.io/
 
 .. _GitHub page: https://github.com/refenv/cijoe-pkg-xnvme
