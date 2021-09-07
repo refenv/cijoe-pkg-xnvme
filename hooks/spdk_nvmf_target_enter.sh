@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 #
 # Set up and initialize the target controller
+# REQUIRES:
+# - NVMEF_TARGET_SSH_{HOST/PORT}
+#   Custom SSH-configuration since it is assumed that SSH_{HOST,PORT} is for the fabrics-initiator
+#   e.g. where the testcases are actually executing.
+# - NVMEF_TARGET_{ADDR,PORT}
+#   This is needed in to locate the SPDK "nvmf" binary and "rpc.py" script inside the xNVMe repos,
+#   such that the cijoe-hook can SSH into the machine, start the listener and export devices This
+#   is an absolute path on the host reachable via NVMEF_TARGET_SSH_{HOST,PORT}
+# - NVMEF_TARGET_XNVME_REPOS_PATH
+#   This is needed in to locate the SPDK "nvmf" binary and "rpc.py" script inside the xNVMe repos,
+#   such that the cijoe-hook can SSH into the machine, start the listener and export devices
+#   This is an absolute path on the host reachable via NVMEF_TARGET_SSH_{HOST,PORT}
 #
 CIJ_TEST_NAME="$(basename "${BASH_SOURCE[0]}")"
 export CIJ_TEST_NAME
@@ -33,11 +45,15 @@ hook::spdk_nvmf_target_enter() {
   local spdk_path="${NVMEF_TARGET_XNVME_REPOS_PATH}/third-party/spdk/repos"
 
   SSH_HOST="${NVMEF_TARGET_SSH_HOST}"; export SSH_HOST
-  SSH_PORT="${NVMEF_TARGET_SSH_PORT}"; export SSH_HOST
+  SSH_PORT="${NVMEF_TARGET_SSH_PORT}"; export SSH_PORT
   local rpc="${spdk_path}/scripts/rpc.py"
   local nqn="nqn.2020-06.io.spdk:cnode1"
 
   cij::info "hook:spdk_nvmf_target_enter: Setting up NVMeOF target"
+
+  if ! cij::cmd "pkill -f SCREEN"; then
+    cij::info "Failed killing screen... that is ok. Probably just means it was not running."
+  fi
 
   # Load xnvme SPDK driver
   if ! cij::cmd "HUGEMEM=${HUGEMEM} xnvme-driver"; then
@@ -73,15 +89,16 @@ hook::spdk_nvmf_target_enter() {
     cij::err "spdk_nvmf_target_enter: failed fabrics setup"
     return 1
   fi
-  if [[ "${NVME_NSTYPE}" == "zoned" ]]; then
+  #if [[ "${NVME_NSTYPE}" == "zoned" ]]; then
     if ! cij::cmd "${rpc} nvmf_subsystem_add_ns ${nqn} Nvme0n2"; then
       cij::err "spdk_nvmf_target_enter: failed fabrics setup"
       return 1
     fi
-  fi
+  #fi
 
   # Add listener
   if ! cij::cmd "${rpc} nvmf_subsystem_add_listener ${nqn} -t ${NVMEF_TRANSPORT} -a ${NVMEF_TARGET_ADDR} -s ${NVMEF_TARGET_PORT}"; then
+  #if ! cij::cmd "${rpc} nvmf_subsystem_add_listener ${nqn} -t ${NVMEF_TRANSPORT} -a 0.0.0.0 -s ${NVMEF_TARGET_PORT}"; then
     cij::err "spdk_nvmf_target_enter: failed fabrics setup"
     return 1
   fi

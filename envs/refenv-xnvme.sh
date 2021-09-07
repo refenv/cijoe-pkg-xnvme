@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
-# CIJOE: SSH_* environment variables; comment out to match target machine
+# CIJOE: SSH_* environment variables; comment out to match your test-target machine
 #: "${SSH_HOST=localhost}"; export SSH_HOST
 #: "${SSH_PORT:=22}"; export SSH_PORT
 #: "${SSH_USER:=root}"; export SSH_USER
-
+#: "${SSH_NO_CHECKS:=1}"; export SSH_NO_CHECKS
 #
-# NVMe-over-Fabrics info; setup identifying Fabrics endpoint(target)
+
+# NVMe-over-Fabrics environment variables
+#
+# See the XNVME_URI-construction below and the "spdk_nvmef" hook for details on how these variables
+# are used
 #
 #NVMEF_TRANSPORT="TCP"; export NVMEF_TRANSPORT
 #NVMEF_TARGET_ADDR="IP-address-of-NVMEF-target"; export NVMEF_TARGET_ADDR
@@ -21,21 +25,15 @@
 #
 
 # Select other values based on 'NVME_NSTYPE' defined in testplan
+PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
+NVME_CNTID="0"; export NVME_CNTID
 if [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "lblk" ]]; then
-  PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
-  NVME_CNTID="0"; export NVME_CNTID
   NVME_NSID="1"; export NVME_NSID
 elif [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "zoned" ]]; then
-  PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
-  NVME_CNTID="0"; export NVME_CNTID
   NVME_NSID="2"; export NVME_NSID
 elif [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "kvs" ]]; then
-  PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
-  NVME_CNTID="0"; export NVME_CNTID
   NVME_NSID="3"; export NVME_NSID
 else
-  PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
-  NVME_CNTID="0"; export NVME_CNTID
   NVME_NSID="1"; export NVME_NSID
 fi
 
