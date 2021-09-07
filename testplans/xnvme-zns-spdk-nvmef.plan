@@ -2,7 +2,7 @@ descr: Verify xNVMe Zoned Command Set using a SPDK NVMe driver and via fabrics
 descr_long: |
   Basic verification of xNVMe using through the different IO and control paths.
   Leaving out changes-log as it is not support in upstream qemu6
-hooks: ["sysinf", "xnvme", "spdk_nvmf_target"]
+hooks: ["xnvme", "spdk_nvmf_target"]
 evars:
   CMD_PREFIX: " "
   FIO_NRUNS: "1"

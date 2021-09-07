@@ -7,7 +7,7 @@ descr_long: |
   * queue-init/teardown of io_uring/libaio/posix
   Requires
   * XNVME_URI points to an NVMe namespace over fabrics
-hooks: ["sysinf", "xnvme", "spdk_nvmf_target"]
+hooks: ["xnvme", "spdk_nvmf_target"]
 evars:
   NVME_NSTYPE: "lblk"
   DEV_TYPE: "nvme"
