@@ -16,11 +16,6 @@
 # nullblk::remove       - Remove the Linux Null Block Kernel module
 #
 nullblk::env() {
-  if ! ssh::env; then
-    cij::err "nullblk::env - Invalid SSH ENV."
-    return 1
-  fi
-
   : "${NULLBLK_MODULE_NAME:=null_blk}"
 
   # Setup via cfg-path

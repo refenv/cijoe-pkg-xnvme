@@ -10,11 +10,6 @@
 # xnvme::fioe   - Runs fio with the xNVMe fio IO Engine
 #
 xnvme::env() {
-  if ! ssh::env; then
-    cij::err "xnvme::env - Invalid SSH ENV."
-    return 1
-  fi
-
   : "${XNVME_SHARE_ROOT:=/usr/share/xnvme}"
   export XNVME_SHARE_ROOT
 
