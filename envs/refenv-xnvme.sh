@@ -25,7 +25,7 @@
 #
 
 # Select other values based on 'NVME_NSTYPE' defined in testplan
-PCI_DEV_NAME="0000:01:00.0"; export PCI_DEV_NAME
+PCI_DEV_NAME="0000:03:00.0"; export PCI_DEV_NAME
 NVME_CNTID="0"; export NVME_CNTID
 if [[ -v NVME_NSTYPE && "${NVME_NSTYPE}" == "lblk" ]]; then
   NVME_NSID="1"; export NVME_NSID
