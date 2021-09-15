@@ -27,7 +27,7 @@ if [[ ! -v FIO_BS_LIST ]]; then
   : "${FIO_BS_LIST:=512}"
 fi
 if [[ ! -v FIO_IODEPTH_LIST ]]; then
-  : "${FIO_IODEPTH_LIST:=512}"
+  : "${FIO_IODEPTH_LIST:=1}"
 fi
 
 for FIO_IODEPTH in $FIO_IODEPTH_LIST; do
