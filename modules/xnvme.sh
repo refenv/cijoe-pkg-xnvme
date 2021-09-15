@@ -114,7 +114,7 @@ xnvme::fioe() {
   # Add the not-so-special-sauce for built-in io-engines
   else
     _cmd="${_cmd} --ioengine=${ioengine_name}"
-    _cmd="${_cmd} --filename=${NVME_DEV_PATH}"
+    _cmd="${_cmd} --filename=${XNVME_URI}"
   fi
 
   if [[ -v FIO_AUX ]]; then
