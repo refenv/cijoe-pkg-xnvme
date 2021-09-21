@@ -10,10 +10,10 @@
 # xnvme::fioe   - Runs fio with the xNVMe fio IO Engine
 #
 xnvme::env() {
-  : "${XNVME_SHARE_ROOT:=/usr/share/xnvme}"
+  #: "${XNVME_SHARE_ROOT:=/usr/share/xnvme}"
   export XNVME_SHARE_ROOT
 
-  : "${XNVME_LIB_ROOT:=/usr/lib}"
+  #: "${XNVME_LIB_ROOT:=/usr/lib}"
   export XNVME_LIB_ROOT
 
   return 0
@@ -48,12 +48,15 @@ xnvme::fioe() {
   local section=$3
   local output_fpath=$4
 
-  local jobfile="${XNVME_SHARE_ROOT}/${script_fname}"
+  local jobfile="${script_fname}"
+  if [[ -v XNVME_SHARE_ROOT && ! -z "${XNVME_SHARE_ROOT}" ]]; then
+    jobfile="${XNVME_SHARE_ROOT}/${jobfile}"
+  fi
   local _cmd
 
   if ! cij::cmd "[[ -f \"${jobfile}\" ]]"; then
     cij::err "xnvme:fioe: '${jobfile}' does not exist!"
-    return 1
+    #return 1
   fi
 
   _cmd="${CMD_PREFIX} ${FIO_BIN} ${jobfile}"
@@ -75,12 +78,17 @@ xnvme::fioe() {
     : "${XNVME_SYNC:?Must be set and non-empty}"
     : "${XNVME_ADMIN:?Must be set and non-empty}"
 
-    local _fioe_so="${XNVME_LIB_ROOT}/libxnvme-fio-engine.so"
+    local _fioe_so
+    if [[ -v XNVME_BE && "${XNVME_BE}" == "windows" ]]; then
+      _fioe_so="${XNVME_LIB_ROOT}libxnvme-fio-engine.dll"
+    else
+      _fioe_so="${XNVME_LIB_ROOT}/libxnvme-fio-engine.so"
+    fi
     local _fioe_uri=${XNVME_URI//:/\\\\:}
 
     if ! cij::cmd "[[ -f \"${_fioe_so}\" ]]"; then
       cij::err "xnvme:fioe: '${_fioe_so}' does not exist!"
-      return 1
+      #return 1
     fi
 
     _cmd="${_cmd} --ioengine=external:${_fioe_so}"
