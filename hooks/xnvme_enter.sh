@@ -10,20 +10,20 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
-hook::xnvme_enter() {
-  if ! xnvme::env; then
-    cij::err "xnvme::env - Invalid xNVMe env."
+hook.xnvme_enter() {
+  if ! xnvme.env; then
+    cij.err "xnvme.env - Invalid xNVMe env."
     return 1
   fi
 
   if [[ ! -v XNVME_BE || -z "${XNVME_BE}" ]]; then
-    cij::err "hook::xnvme_enter: XNVME_BE is not set or is the empty string"
+    cij.err "hook.xnvme_enter: XNVME_BE is not set or is the empty string"
     return 1
   fi
 
-  cij::info "hook:xnvme_enter: XNVME_BE(${XNVME_BE})"
+  cij.info "hook:xnvme_enter: XNVME_BE(${XNVME_BE})"
 
   XNVME_DRIVER_CMD="xnvme-driver"
 
@@ -44,13 +44,13 @@ hook::xnvme_enter() {
     XNVME_DRIVER_CMD="${XNVME_DRIVER_CMD} reset"
   esac
 
-  if ! cij::cmd "${XNVME_DRIVER_CMD}"; then
-    cij::err "hook::xnvme_enter: FAILED: detaching NVMe driver"
+  if ! cij.cmd "${XNVME_DRIVER_CMD}"; then
+    cij.err "hook.xnvme_enter: FAILED: detaching NVMe driver"
     return 1
   fi
 
   return 0
 }
 
-hook::xnvme_enter
+hook.xnvme_enter
 exit $?

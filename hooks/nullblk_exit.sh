@@ -9,16 +9,16 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
-hook::nullblk_exit() {
-  if ! nullblk::remove; then
-    cij::err "hook::nullblk_exit: failed: nullblk::insert"
+hook.nullblk_exit() {
+  if ! nullblk.remove; then
+    cij.err "hook.nullblk_exit: failed: nullblk.insert"
     return 1
   fi
 
   return 0
 }
 
-hook::nullblk_exit
+hook.nullblk_exit
 exit $?

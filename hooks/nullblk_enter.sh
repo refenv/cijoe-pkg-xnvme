@@ -9,15 +9,15 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
-hook::nullblk_enter() {
-  if ! nullblk::remove; then
-    cij::info "hook:nullblk_enter: FAILED nullblk::remove -- continuing"
+hook.nullblk_enter() {
+  if ! nullblk.remove; then
+    cij.info "hook:nullblk_enter: FAILED nullblk.remove -- continuing"
   fi
 
-  if ! nullblk::insert; then
-    cij::err "hook::nullblk_enter: FAILED: nullblk::insert"
+  if ! nullblk.insert; then
+    cij.err "hook.nullblk_enter: FAILED: nullblk.insert"
     return 1
   fi
 
@@ -30,14 +30,14 @@ hook::nullblk_enter() {
     export NULLBLK_ZONED
 
     NULLBLK_ZONED="0"
-    if ! nullblk::create; then
-      cij::err "hook::nullblk_enter: FAILED: nullblk:create"
+    if ! nullblk.create; then
+      cij.err "hook.nullblk_enter: FAILED: nullblk:create"
       return 1
     fi
 
     NULLBLK_ZONED="1"
-    if ! nullblk::create; then
-      cij::err "hook::nullblk_enter: FAILED: nullblk:create"
+    if ! nullblk.create; then
+      cij.err "hook.nullblk_enter: FAILED: nullblk:create"
       return 1
     fi
     ;;
@@ -46,5 +46,5 @@ hook::nullblk_enter() {
   return 0
 }
 
-hook::nullblk_enter
+hook.nullblk_enter
 exit $?
