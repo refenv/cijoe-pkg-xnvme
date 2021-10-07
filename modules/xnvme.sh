@@ -6,10 +6,10 @@
 #
 # For documentation of parameters / variables.
 #
-# xnvme::env    - Checks environment for module parameters
-# xnvme::fioe   - Runs fio with the xNVMe fio IO Engine
+# xnvme.env    - Checks environment for module parameters
+# xnvme.fioe   - Runs fio with the xNVMe fio IO Engine
 #
-xnvme::env() {
+xnvme.env() {
   #: "${XNVME_SHARE_ROOT:=/usr/share/xnvme}"
   export XNVME_SHARE_ROOT
 
@@ -21,22 +21,22 @@ xnvme::env() {
 
 #
 # Uses:
-# - xnvme::env
+# - xnvme.env
 # - XNVME_URI
 # - CMD_PREFIX (optional)
 # - XNVME_SHARE_ROOT
 # - XNVME_LIB_ROOT
 #
-xnvme::fioe() {
+xnvme.fioe() {
   if [[ -z "$1" || -z "$2" ]]; then
-    cij::err "usage: xnvme::fioe('fio-script.fname', 'ioengine_name')"
-    cij::err " or"
-    cij::err "usage: xnvme::fioe('fio-script.fname', 'ioengine_name', 'section')"
+    cij.err "usage: xnvme.fioe('fio-script.fname', 'ioengine_name')"
+    cij.err " or"
+    cij.err "usage: xnvme.fioe('fio-script.fname', 'ioengine_name', 'section')"
     return 1
   fi
 
-  if ! xnvme::env; then
-    cij::err "xnvme:fioe: invalid xNVMe environment"
+  if ! xnvme.env; then
+    cij.err "xnvme:fioe: invalid xNVMe environment"
     return 1
   fi
 
@@ -54,8 +54,8 @@ xnvme::fioe() {
   fi
   local _cmd
 
-  if ! cij::cmd "[[ -f \"${jobfile}\" ]]"; then
-    cij::err "xnvme:fioe: '${jobfile}' does not exist!"
+  if ! cij.cmd "[[ -f \"${jobfile}\" ]]"; then
+    cij.err "xnvme:fioe: '${jobfile}' does not exist!"
     #return 1
   fi
 
@@ -86,8 +86,8 @@ xnvme::fioe() {
     fi
     local _fioe_uri=${XNVME_URI//:/\\\\:}
 
-    if ! cij::cmd "[[ -f \"${_fioe_so}\" ]]"; then
-      cij::err "xnvme:fioe: '${_fioe_so}' does not exist!"
+    if ! cij.cmd "[[ -f \"${_fioe_so}\" ]]"; then
+      cij.err "xnvme:fioe: '${_fioe_so}' does not exist!"
       #return 1
     fi
 
@@ -112,7 +112,7 @@ xnvme::fioe() {
     # Produce SPDK config-file
     echo "[Nvme]" > /tmp/spdk.bdev.conf
     echo "  TransportID \"trtype:PCIe traddr:${PCI_DEV_NAME}\" Nvme0" >> /tmp/spdk.bdev.conf
-    ssh::push /tmp/spdk.bdev.conf /opt/aux/spdk.bdev.conf
+    ssh.push /tmp/spdk.bdev.conf /opt/aux/spdk.bdev.conf
 
     _cmd="LD_PRELOAD=${SPDK_FIOE_ROOT}/${ioengine_name} ${_cmd}"
     _cmd="${_cmd} --ioengine=${ioengine_name}"
@@ -134,16 +134,16 @@ xnvme::fioe() {
   _cmd="${_cmd} --output-format=normal,json --output=${_trgt_fname}"
 
   # Now run that fio tester!
-  if ! cij::cmd "${_cmd}"; then
-    cij::err "xnvme::fioe: error running fio"
+  if ! cij.cmd "${_cmd}"; then
+    cij.err "xnvme.fioe: error running fio"
 
-    ssh::pull "${_trgt_fname}" "${output_fpath}"
+    ssh.pull "${_trgt_fname}" "${output_fpath}"
     return 1
   fi
 
   # Download the output
-  if ! ssh::pull "${_trgt_fname}" "${output_fpath}"; then
-    cij::err "xnvme::fioe: failed pulling down fio output-file"
+  if ! ssh.pull "${_trgt_fname}" "${output_fpath}"; then
+    cij.err "xnvme.fioe: failed pulling down fio output-file"
     return 0
   fi
 

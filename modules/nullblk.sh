@@ -4,18 +4,18 @@
 #
 # The module depends on 'modprobe' to do the insertion/removal
 #
-# The nullblk::env sets up environment variables for the Null Block parameters,
+# The nullblk.env sets up environment variables for the Null Block parameters,
 # named "NULLBLK_{PARAMATER_NAME}", see:
 #
 # https://www.kernel.org/doc/html/latest/block/null_blk.html
 #
 # For documentation of parameters / variables.
 #
-# nullblk::env          - Checks environment for module parameters
-# nullblk::insert       - Insert the Linux Null Block Kernel module
-# nullblk::remove       - Remove the Linux Null Block Kernel module
+# nullblk.env          - Checks environment for module parameters
+# nullblk.insert       - Insert the Linux Null Block Kernel module
+# nullblk.remove       - Remove the Linux Null Block Kernel module
 #
-nullblk::env() {
+nullblk.env() {
   : "${NULLBLK_MODULE_NAME:=null_blk}"
 
   # Setup via cfg-path
@@ -43,9 +43,9 @@ nullblk::env() {
   : "${NULLBLK_ZONE_NR_CONV:=0}"        # Number of conventional / random-access zones
 }
 
-nullblk::params() {
-  if ! nullblk::env; then
-    cij::err "nullblk::env - invalid Null Block ENV."
+nullblk.params() {
+  if ! nullblk.env; then
+    cij.err "nullblk.env - invalid Null Block ENV."
     return 1
   fi
 
@@ -75,9 +75,9 @@ nullblk::params() {
   return 0
 }
 
-nullblk::create() {
-  if ! nullblk::env; then
-    cij::err "nullblk::env - invalid Null Block ENV."
+nullblk.create() {
+  if ! nullblk.env; then
+    cij.err "nullblk.env - invalid Null Block ENV."
     return 1
   fi
 
@@ -93,7 +93,7 @@ nullblk::create() {
     _devname="nullb${_id}"
     _cfg_path="${_kpath}/${_devname}"
 
-    if cij::cmd "mkdir ${_cfg_path}"; then
+    if cij.cmd "mkdir ${_cfg_path}"; then
       break
     fi
 
@@ -102,7 +102,7 @@ nullblk::create() {
   done
 
   if [[ _limit -eq 10 ]]; then
-    cij::err "failed"
+    cij.err "failed"
     return 1
   fi
 
@@ -126,49 +126,49 @@ nullblk::create() {
 
   _cmd="${_cmd} && echo '1' >> ${_cfg_path}/power"
 
-  if ! cij::cmd "${_cmd}"; then
-    cij::err "nullblk:::create: failed creating nullblk instance: '${_devname}'"
+  if ! cij.cmd "${_cmd}"; then
+    cij.err "nullblk.:create: failed creating nullblk instance: '${_devname}'"
     return 1
   fi
 
-  cij::info "nullblk:::create: created nullblk instance: '${_devname}'"
+  cij.info "nullblk.:create: created nullblk instance: '${_devname}'"
 
   return 0
 }
 
-nullblk::insert() {
-  if ! nullblk::params; then
-    cij::err "nullblk::env - invalid params"
+nullblk.insert() {
+  if ! nullblk.params; then
+    cij.err "nullblk.env - invalid params"
     return 1
   fi
 
   # Create Null-block instances via config-fs instead
   if [[ "${NULLBLK_NR_DEVICES}" == "0" ]]; then
     NULLBLK_PARAMS="nr_devices=0"
-    cij::info "nullblk::insert: nr_devices == 0; expecting config via cfgfs"
+    cij.info "nullblk.insert: nr_devices == 0; expecting config via cfgfs"
   else
-    cij::info "nullblk::insert: nr_devices > 0; doing stuff"
+    cij.info "nullblk.insert: nr_devices > 0; doing stuff"
   fi
 
-  if ! cij::cmd "modprobe ${NULLBLK_MODULE_NAME} ${NULLBLK_PARAMS}"; then
-    cij::err "nullblk:::insert: failed modprobe"
+  if ! cij.cmd "modprobe ${NULLBLK_MODULE_NAME} ${NULLBLK_PARAMS}"; then
+    cij.err "nullblk.:insert: failed modprobe"
     return 1
   fi
 
   return 0
 }
 
-nullblk::remove() {
-  if ! nullblk::env; then
-    cij::err "nullblk::env - invalid Null Block ENV."
+nullblk.remove() {
+  if ! nullblk.env; then
+    cij.err "nullblk.env - invalid Null Block ENV."
     return 1
   fi
 
-  if ! cij::cmd "rmdir /sys/kernel/config/nullb/nullb*"; then
-    cij::info "nullblk:::remove: failed removing instances"
+  if ! cij.cmd "rmdir /sys/kernel/config/nullb/nullb*"; then
+    cij.info "nullblk.:remove: failed removing instances"
   fi
-  if ! cij::cmd "modprobe -r ${NULLBLK_MODULE_NAME}"; then
-    cij::err "nullblk:::remove: failed removing module"
+  if ! cij.cmd "modprobe -r ${NULLBLK_MODULE_NAME}"; then
+    cij.err "nullblk.:remove: failed removing module"
     return 1
   fi
 
