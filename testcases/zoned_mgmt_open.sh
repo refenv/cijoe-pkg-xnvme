@@ -8,7 +8,7 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
@@ -28,20 +28,20 @@ XNVME_RT_ARGS="${XNVME_RT_ARGS} --sync ${XNVME_ADMIN}"
 
 ZDI=$(python -c "print(\"\".join([chr(i % 26 + 65) for i in range(128)]))")
 echo -n "$ZDI" > "$ZDI_PATH"
-ssh::push "$ZDI_PATH" /tmp/zdi.bin
+ssh.push "$ZDI_PATH" /tmp/zdi.bin
 
-if ! cij::cmd "zoned mgmt-reset ${XNVME_URI} --slba ${CMD_SLBA} ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned mgmt-reset ${XNVME_URI} --slba ${CMD_SLBA} ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-if ! cij::cmd "zoned mgmt-open ${XNVME_URI} --slba ${CMD_SLBA} ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned mgmt-open ${XNVME_URI} --slba ${CMD_SLBA} ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-if ! cij::cmd "zoned report ${XNVME_URI} --slba ${CMD_SLBA} --limit 1 --data-output /tmp/report.bin ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned report ${XNVME_URI} --slba ${CMD_SLBA} --limit 1 --data-output /tmp/report.bin ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-ssh::pull "/tmp/report.bin" "${CIJ_TEST_AUX_ROOT}/report.bin"
+ssh.pull "/tmp/report.bin" "${CIJ_TEST_AUX_ROOT}/report.bin"
 
-test::pass
+test.pass

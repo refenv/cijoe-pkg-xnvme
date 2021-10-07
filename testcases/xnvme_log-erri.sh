@@ -10,7 +10,7 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
@@ -26,11 +26,11 @@ XNVME_RT_ARGS="${XNVME_RT_ARGS} --admin ${XNVME_ADMIN}"
 
 : "${CMD_NSID:=0x0}"
 
-if ! cij::cmd "xnvme log-erri ${XNVME_URI} --nsid ${CMD_NSID} --data-output /tmp/xnvme_log-erri.bin ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "xnvme log-erri ${XNVME_URI} --nsid ${CMD_NSID} --data-output /tmp/xnvme_log-erri.bin ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
 # Grab the log-output
-ssh::pull "/tmp/xnvme_log-erri.bin" "${CIJ_TEST_AUX_ROOT}/"
+ssh.pull "/tmp/xnvme_log-erri.bin" "${CIJ_TEST_AUX_ROOT}/"
 
-test::pass
+test.pass

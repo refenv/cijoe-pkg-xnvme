@@ -9,7 +9,7 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
@@ -28,9 +28,9 @@ XNVME_RT_ARGS="${XNVME_RT_ARGS} --async ${XNVME_ASYNC}"
 QDEPTH=64
 
 for COUNT in 1 2 4 8 16 32 64 128; do
-  if ! cij::cmd "xnvme_tests_async_intf init_term ${XNVME_URI} --count ${COUNT} --qdepth ${QDEPTH} ${XNVME_RT_ARGS}"; then
-    test::fail
+  if ! cij.cmd "xnvme_tests_async_intf init_term ${XNVME_URI} --count ${COUNT} --qdepth ${QDEPTH} ${XNVME_RT_ARGS}"; then
+    test.fail
   fi
 done
 
-test::pass
+test.pass

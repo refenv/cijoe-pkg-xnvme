@@ -10,7 +10,7 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
@@ -30,18 +30,18 @@ XNVME_RT_ARGS="${XNVME_RT_ARGS} --admin ${XNVME_ADMIN}"
 
 CMD_FPATH=$(mktemp -u --tmpdir=/tmp -t glp_XXXXXX.nvmec)
 
-if ! cij::cmd "nvmec create --opcode ${CMD_OPCODE} --cdw10 ${CMD_CNS} --cmd-output ${CMD_FPATH}"; then
-  test::fail
+if ! cij.cmd "nvmec create --opcode ${CMD_OPCODE} --cdw10 ${CMD_CNS} --cmd-output ${CMD_FPATH}"; then
+  test.fail
 fi
 
-if ! cij::cmd "nvmec show --cmd-input ${CMD_FPATH}"; then
-  test::fail
+if ! cij.cmd "nvmec show --cmd-input ${CMD_FPATH}"; then
+  test.fail
 fi
 
-cij::info "Passing command through"
+cij.info "Passing command through"
 
-if ! cij::cmd "xnvme padc ${XNVME_URI} --cmd-input ${CMD_FPATH} --data-nbytes ${CMD_DATA_NBYTES} ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "xnvme padc ${XNVME_URI} --cmd-input ${CMD_FPATH} --data-nbytes ${CMD_DATA_NBYTES} ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-test::pass
+test.pass

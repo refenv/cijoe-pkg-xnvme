@@ -13,7 +13,7 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
@@ -32,22 +32,22 @@ XNVME_RT_ARGS="${XNVME_RT_ARGS} --sync ${XNVME_ADMIN}"
 : "${CMD_NLB:=1}"
 : "${CMD_SLBA:=0x0}"
 
-if ! cij::cmd "zoned mgmt-reset ${XNVME_URI} --slba ${CMD_SLBA} ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned mgmt-reset ${XNVME_URI} --slba ${CMD_SLBA} ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
 XNVME_RT_ARGS="${XNVME_RT_ARGS} --sync ${XNVME_SYNC}"
 
-if ! cij::cmd "zoned append ${XNVME_URI} --slba ${CMD_SLBA} --nlb ${CMD_NLB} ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned append ${XNVME_URI} --slba ${CMD_SLBA} --nlb ${CMD_NLB} ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-if ! cij::cmd "zoned append ${XNVME_URI} --slba ${CMD_SLBA} --nlb ${CMD_NLB} ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned append ${XNVME_URI} --slba ${CMD_SLBA} --nlb ${CMD_NLB} ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-if ! cij::cmd "zoned append ${XNVME_URI} --slba ${CMD_SLBA} --nlb ${CMD_NLB} ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned append ${XNVME_URI} --slba ${CMD_SLBA} --nlb ${CMD_NLB} ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-test::pass
+test.pass

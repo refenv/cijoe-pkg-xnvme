@@ -11,7 +11,7 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
@@ -31,20 +31,20 @@ XNVME_RT_ARGS="${XNVME_RT_ARGS} --sync ${XNVME_ADMIN}"
 : "${CMD_NLB:=0}"
 : "${LIMIT:=1}"
 
-if ! cij::cmd "zoned mgmt-reset $XNVME_URI --slba $CMD_SLBA ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned mgmt-reset $XNVME_URI --slba $CMD_SLBA ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-if ! cij::cmd "zoned report $XNVME_URI --slba $CMD_SLBA --limit $LIMIT ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned report $XNVME_URI --slba $CMD_SLBA --limit $LIMIT ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-if ! cij::cmd "zoned write $XNVME_URI --slba $CMD_SLBA --nlb $CMD_NLB ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned write $XNVME_URI --slba $CMD_SLBA --nlb $CMD_NLB ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-if ! cij::cmd "zoned report $XNVME_URI --slba $CMD_SLBA --limit $LIMIT ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned report $XNVME_URI --slba $CMD_SLBA --limit $LIMIT ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-test::pass
+test.pass

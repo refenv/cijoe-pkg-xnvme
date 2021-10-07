@@ -11,7 +11,7 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
@@ -29,8 +29,8 @@ XNVME_RT_ARGS="${XNVME_RT_ARGS} --sync ${XNVME_ADMIN}"
 : "${SLBA:=0x000000000001dc00}"
 : "${LIMIT:=10}"
 
-if ! cij::cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned report $XNVME_URI --slba $SLBA --limit $LIMIT ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-test::pass
+test.pass

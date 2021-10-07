@@ -10,7 +10,7 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
@@ -26,8 +26,8 @@ XNVME_RT_ARGS="${XNVME_RT_ARGS} --be ${XNVME_BE}"
 XNVME_RT_ARGS="${XNVME_RT_ARGS} --admin ${XNVME_ADMIN}"
 XNVME_RT_ARGS="${XNVME_RT_ARGS} --async ${XNVME_ASYNC}"
 
-if ! cij::cmd "zoned_io_async read ${XNVME_URI} ${XNVME_RT_ARGS}"; then
-  test::fail
+if ! cij.cmd "zoned_io_async read ${XNVME_URI} ${XNVME_RT_ARGS}"; then
+  test.fail
 fi
 
-test::pass
+test.pass

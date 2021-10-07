@@ -8,14 +8,14 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${XNVME_URI:?Must be set and non-empty}"
 
 COUNT=4
 
-if ! cij::cmd "xnvme_tests_enum open --count ${COUNT}"; then
-  test::fail
+if ! cij.cmd "xnvme_tests_enum open --count ${COUNT}"; then
+  test.fail
 fi
 
-test::pass
+test.pass

@@ -11,7 +11,7 @@ CIJ_TEST_NAME=$(basename "${BASH_SOURCE[0]}")
 export CIJ_TEST_NAME
 # shellcheck source=modules/cijoe.sh
 source "$CIJ_ROOT/modules/cijoe.sh"
-test::enter
+test.enter
 
 : "${TMPFS_MP:=/opt/tmpfs}"
 
@@ -19,28 +19,28 @@ test::enter
 : "${dst_fpath:=${TMPFS_MP}/output.bin}"
 : "${iosize:=4096}"
 
-if ! cij::cmd "dd if=/dev/zero of=${dst_fpath} bs=1M count=1000"; then
-  test::fail
+if ! cij.cmd "dd if=/dev/zero of=${dst_fpath} bs=1M count=1000"; then
+  test.fail
 fi
-if ! cij::cmd "sync"; then
-  test::fail
+if ! cij.cmd "sync"; then
+  test.fail
 fi
-if cij::cmd "free -m "; then
-  test::fail
+if cij.cmd "free -m "; then
+  test.fail
 fi
-if ! cij::cmd "df -h"; then
-  test::fail
+if ! cij.cmd "df -h"; then
+  test.fail
 fi
-if ! cij::cmd "lsblk"; then
-  test::fail
-fi
-
-if ! cij::cmd "xnvme_file copy-sync ${src_fpath} ${dst_fpath} --iosize=${iosize}"; then
-  test::fail
+if ! cij.cmd "lsblk"; then
+  test.fail
 fi
 
-if cij::cmd "free -m "; then
-  test::fail
+if ! cij.cmd "xnvme_file copy-sync ${src_fpath} ${dst_fpath} --iosize=${iosize}"; then
+  test.fail
 fi
 
-test::pass
+if cij.cmd "free -m "; then
+  test.fail
+fi
+
+test.pass
