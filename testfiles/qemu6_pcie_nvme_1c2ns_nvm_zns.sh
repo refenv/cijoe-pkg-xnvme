@@ -35,14 +35,14 @@ qemu_setup_pcie() {
   _args="${_args} -device nvme,id=${_ctrlr_ident},serial=deadbeef,bus=pcie_downstream_port1,mdts=${_ctrlr_mdts}"
 
   # Create the NVM Namespace backing-image and QEMU configuration args
-  qemu::img_create "${_ns_nvm_ident}" "raw" "${_ns_nvm_size}"
-  _args="${_args} $(qemu::args_drive ${_ns_nvm_ident} raw)"
+  qemu.img_create "${_ns_nvm_ident}" "raw" "${_ns_nvm_size}"
+  _args="${_args} $(qemu.args_drive ${_ns_nvm_ident} raw)"
 
   _args="${_args} -device nvme-ns,id=${_ns_nvm_ident},drive=${_ns_nvm_ident},bus=${_ctrlr_ident},nsid=${_ns_nvm_nsid}"
 
   # Create the Zoned Namespace backing-image and QEMU configuration args
-  qemu::img_create "${_ns_zns_ident}" "raw" "${_ns_zns_size}"
-  _args="${_args} $(qemu::args_drive ${_ns_zns_ident} raw)"
+  qemu.img_create "${_ns_zns_ident}" "raw" "${_ns_zns_size}"
+  _args="${_args} $(qemu.args_drive ${_ns_zns_ident} raw)"
 
   # Namespace setup
   _args="${_args} -device nvme-ns,id=${_ns_zns_ident}"
