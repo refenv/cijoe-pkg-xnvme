@@ -49,7 +49,7 @@ xnvme::fioe() {
   local output_fpath=$4
 
   local jobfile="${script_fname}"
-  if [[ -v XNVME_SHARE_ROOT && ! -z "${XNVME_SHARE_ROOT}" ]]; then
+  if [[ -v XNVME_SHARE_ROOT && -n "${XNVME_SHARE_ROOT}" ]]; then
     jobfile="${XNVME_SHARE_ROOT}/${jobfile}"
   fi
   local _cmd
