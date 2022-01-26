@@ -71,8 +71,10 @@ fi
 # xNVMe: where are libraries and share stored on the target system? This is
 # needed to find the xNVMe fio io-engine, fio scripts etc.
 #
-: "${XNVME_LIB_ROOT:=/usr/lib}"; export XNVME_LIB_ROOT
-: "${XNVME_SHARE_ROOT:=/usr/share/xnvme}"; export XNVME_SHARE_ROOT
+# Consult: 'pkg-config --variable="libdir" xnvme' on the target system
+: "${XNVME_LIB_ROOT:=/usr/local/lib/x86_64-linux-gnu}"; export XNVME_LIB_ROOT
+# Consult: 'pkg-config --variable="datadir" xnvme' on the target system
+: "${XNVME_SHARE_ROOT:=/usr/local/share/xnvme}"; export XNVME_SHARE_ROOT
 
 # These are for running fio
 if [[ -v NVME_NSTYPE ]]; then
