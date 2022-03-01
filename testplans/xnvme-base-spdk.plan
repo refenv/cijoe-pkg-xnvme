@@ -13,7 +13,6 @@ evars:
   DEV_TYPE: "nvme"
   XNVME_BE: "spdk"
   XNVME_ADMIN: "nvme"
-  HUGEMEM: "4096"
 
 
 testsuites:

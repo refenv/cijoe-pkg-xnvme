@@ -14,7 +14,6 @@ evars:
   XNVME_BE: "spdk"
   XNVME_ADMIN: "nvme"
   XNVME_ASYNC: "nvme"
-  HUGEMEM: "4096"
 
 testsuites:
   - name: XNVME_FABRICS_ENUMERATION

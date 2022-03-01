@@ -10,7 +10,6 @@ evars:
   FIO_SECTION: "default"
   FIO_SCRIPT: "xnvme-verify.fio"
   FIO_IOENG_NAME: "xnvme"
-  HUGEMEM: "4096"
   NVME_NSTYPE: "lblk"
   DEV_TYPE: "nvme"
   XNVME_BE: "spdk"

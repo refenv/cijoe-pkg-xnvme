@@ -2,7 +2,6 @@ descr: Basic verification of Zone-Random-Write-Area ZRWA via xNVMe
 descr_long: Basic verification of Zone-Random-Write-Area ZRWA via xNVMe
 hooks: ["sysinf", "xnvme"]
 evars:
-  HUGEMEM: "4096"
   NVME_NSTYPE: "zoned"
   DEV_TYPE: "nvme"
   XNVME_BE: "linux"

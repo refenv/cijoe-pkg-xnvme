@@ -9,7 +9,6 @@ evars:
   FIO_SECTION: "default"
   FIO_SCRIPT: "xnvme-zoned.fio"
   FIO_IOENG_NAME: "xnvme"
-  HUGEMEM: "4096"
   NVME_NSTYPE: "zoned"
   DEV_TYPE: "nvme"
   XNVME_BE: "linux"

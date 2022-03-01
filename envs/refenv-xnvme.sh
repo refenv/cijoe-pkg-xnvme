@@ -81,6 +81,10 @@ if [[ -v NVME_NSTYPE ]]; then
   : "${SPDK_FIOE_ROOT:=/opt/aux}"; export SPDK_FIOE_ROOT
 fi
 
+# This is for the SPDK setup.sh script and xNVMe xnvme-driver script
+# It can be overwritten in the testplan
+HUGEMEM="${HUGEMEM:=2048}"; export HUGEMEM
+
 # The external fio io-engines usually depend on the fio-version on which they
 # built against. So, we set the FIO_BIN to point it to the version that comes
 # with the xNVMe dockerize reference environment
