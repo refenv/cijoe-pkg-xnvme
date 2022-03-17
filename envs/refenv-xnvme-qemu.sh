@@ -15,7 +15,7 @@
 #: "${QEMU_GUEST_CONSOLE:=stdio}"; export QEMU_GUEST_CONSOLE
 : "${QEMU_GUEST_CONSOLE:=sock}"; export QEMU_GUEST_CONSOLE
 #: "${QEMU_GUEST_HOST_SHARE:=$HOME/git}"; export QEMU_GUEST_CONSOLE
-: "${QEMU_GUEST_MEM:=3G}"; export QEMU_GUEST_MEM
+: "${QEMU_GUEST_MEM:=6G}"; export QEMU_GUEST_MEM
 : "${QEMU_GUEST_SMP:=4}"; export QEMU_GUEST_SMP
 # Use these to boot a custom kernel
 : "${QEMU_GUEST_KERNEL:=0}"; export QEMU_GUEST_KERNEL
